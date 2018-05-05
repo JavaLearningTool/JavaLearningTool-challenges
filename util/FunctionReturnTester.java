@@ -113,7 +113,7 @@ public class FunctionReturnTester<O> extends MethodTester<O> {
                     }
 
                     ComparativeTestResult result;
-                    String consoleOut = getStandarOut();
+                    String consoleOut = getStandardOut();
 
                     if (exception != null) {
 
@@ -153,7 +153,7 @@ public class FunctionReturnTester<O> extends MethodTester<O> {
                 t.stop();
                 if (!testFinished.get()) {
                     // Timeout
-                    String consoleOut = getStandarOut();
+                    String consoleOut = getStandardOut();
                     clearStandardOut();
                     ComparativeTestResult result = new ComparativeTestResult(input, outToString.apply(expectedOut),
                             true, System.currentTimeMillis() - startTime, consoleOut);

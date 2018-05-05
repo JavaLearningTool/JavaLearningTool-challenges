@@ -47,7 +47,7 @@ public class Tester {
         baos.reset();
     }
 
-    protected String getStandarOut() {
+    protected String getStandardOut() {
         // Flush out stream so that all output from stdout is ready
         ps.flush();
         // Get output from stdout

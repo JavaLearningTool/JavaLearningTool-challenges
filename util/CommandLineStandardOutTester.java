@@ -75,7 +75,7 @@ public class CommandLineStandardOutTester extends MethodTester<String> {
 			resetStandardOut();
 			// Call the method to be tested
 			expectedConsumer.accept(args.get(numTest.get()));
-			final String expectedOut = getStandarOut();
+			final String expectedOut = getStandardOut();
 			clearStandardOut();
 
 			// Must be final to be accessed from inner class
@@ -92,7 +92,7 @@ public class CommandLineStandardOutTester extends MethodTester<String> {
 						method.invoke(null, new Object[] { args.get(numTest.get()) });
 
 						// Get output from stdout
-						actualOut = getStandarOut();
+						actualOut = getStandardOut();
 					} catch (IllegalAccessException e) {
 						e.printStackTrace();
 					} catch (InvocationTargetException e) {
@@ -118,7 +118,7 @@ public class CommandLineStandardOutTester extends MethodTester<String> {
 						exception.printStackTrace(pw);
 						String stackTrace = sw.toString();
 
-						String consoleOut = getStandarOut();
+						String consoleOut = getStandardOut();
 
 						result = new ComparativeTestResult(input, expectedOut, stackTrace,
 								System.currentTimeMillis() - startTime, consoleOut);
@@ -150,7 +150,7 @@ public class CommandLineStandardOutTester extends MethodTester<String> {
 				t.stop();
 				if (!testFinished.get()) {
 					// Timed out
-					String consoleOut = getStandarOut();
+					String consoleOut = getStandardOut();
 					ComparativeTestResult result = new ComparativeTestResult(input, expectedOut, true,
 							System.currentTimeMillis() - startTime, consoleOut);
 					results.set(numTest.get(), result);

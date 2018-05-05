@@ -85,6 +85,7 @@ public class HouseClassBuildingTest extends ClassTester {
         addFormatConstructor("constructor", "House %s = new House(\"%s\", \"%s\", %d);", "h", addr, col, age);
         String cap = field.substring(0, 1).toUpperCase() + field.substring(1);
         addChunk("set" + cap, "h.set" + cap + "(\"" + newObj + "\");", "h", newObj);
+        addFieldTest("h", field);
         addChunk("get" + cap, "h.get" + cap + "();", "h");
     }
 
@@ -93,15 +94,14 @@ public class HouseClassBuildingTest extends ClassTester {
         addFormatConstructor("constructor", "House %s = new House(\"%s\", \"%s\", %d);", "h", addr, col, age);
         String cap = field.substring(0, 1).toUpperCase() + field.substring(1);
         addChunk("set" + cap, "h.set" + cap + "(" + newObj + ");", "h", newObj);
+        addFieldTest("h", field);
         addChunk("get" + cap, "h.get" + cap + "();", "h");
     }
 
     private void addConstructorTest(String addr, String col, int age) {
-        startGroup("Testing constructor and getters.");
+        startGroup("Testing constructor.");
         addFormatConstructor("constructor", "House %s = new House(\"%s\", \"%s\", %d);", "h", addr, col, age);
-        addChunk("getAddress", "h.getAddress();", "h");
-        addChunk("getColor", "h.getColor();", "h");
-        addChunk("getAge", "h.getAge();", "h");
+        addFieldTest("h", "address", "color", "age");
     }
 
     public static class House {

@@ -83,6 +83,15 @@ public class CommandLineStandardOutTester extends MethodTester<String> {
 	 * Runs all of the test cases given earlier by calling addArgs
 	 */
 	public void runTests() {
+		runTests(200);
+	}
+
+	/**
+	 * Runs all of the test cases given earlier by calling addArgs
+	 * 
+	 * @param limit the time limit for each test case before timing out
+	 */
+	public void runTests(long limit) {
 
 		if (failedToForm) {
 			throw new RuntimeException("Can't use a tester that didn't fully form.");

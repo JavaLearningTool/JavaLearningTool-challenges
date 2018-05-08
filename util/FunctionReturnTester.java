@@ -60,6 +60,10 @@ public class FunctionReturnTester<O> extends MethodTester<O> {
     }
 
     public void runTests() {
+        runTests(200);
+    }
+
+    public void runTests(long limit) {
 
         if (failedToForm) {
             throw new RuntimeException("Can't use a tester that didn't fully form.");
@@ -149,7 +153,7 @@ public class FunctionReturnTester<O> extends MethodTester<O> {
             t.start();
 
             try {
-                t.join(200);
+                t.join(limit);
                 t.stop();
                 if (!testFinished.get()) {
                     // Timeout

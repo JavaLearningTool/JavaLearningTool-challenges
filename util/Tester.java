@@ -6,10 +6,10 @@ import java.util.List;
 import java.io.ByteArrayOutputStream;
 import java.io.PrintStream;
 
-public class Tester {
+public abstract class Tester {
 
     protected Consumer<List<TestResult>> resultHandler;
-    protected ArrayList<TestResult> results = new ArrayList<TestResult>();
+    protected List<TestResult> results = new ArrayList<TestResult>();
 
     protected boolean failedToForm;
 
@@ -94,4 +94,6 @@ public class Tester {
     public void printResults() {
         oldOut.println(toJsonString());
     }
+
+    public abstract void runTests(long limit);
 }

@@ -1,11 +1,28 @@
+/**
+ * This class represents a type of TestResult that includes some standard out
+ * form the Student's code
+ */
 public abstract class ConsoleOutTestResult extends TestResult {
 
     private String consoleOut;
+
+    // limit how much standard out to include to make for smaller json
     private static final int MAX_CONSOLE_SIZE = 500;
 
-    public ConsoleOutTestResult(String info, boolean passed, long time, boolean timeout, String errorMessage,
+    /**
+     * Constructor for ConsoleOutTestResult
+     * 
+     * @param label        something to describe the test case
+     * @param passed       whether or not the student's code passed
+     * @param time         how long the test took
+     * @param timeout      whether or not the student's code timed out
+     * @param errorMessage the error message from the student's code if an Exception
+     *                     occurred
+     * @param consoleOut   Student's output to stdout
+     */
+    public ConsoleOutTestResult(String label, boolean passed, long time, boolean timeout, String errorMessage,
             String consoleOut) {
-        super(info, passed, time, timeout, errorMessage);
+        super(label, passed, time, timeout, errorMessage);
 
         if (consoleOut != null) {
             // If console log is too large
@@ -17,6 +34,7 @@ public abstract class ConsoleOutTestResult extends TestResult {
         }
     }
 
+    @Override
     protected final StringBuilder getPartsString(boolean timeout, boolean runtimeExceptionOccurred) {
         StringBuilder builder = new StringBuilder("");
 
@@ -33,6 +51,14 @@ public abstract class ConsoleOutTestResult extends TestResult {
         return builder;
     }
 
+    /**
+     * This method adds some json attributes to the middle of the json String
+     * 
+     * @param builder                  the StringBuilder that will be turned into
+     *                                 the json String
+     * @param timeout                  whether or not the test case timed out
+     * @param runtimeExceptionOccurred whether or not a RuntimeException occurred
+     */
     protected abstract void getMiddlePart(StringBuilder builder, boolean timeout, boolean runtimeExceptionOccurred);
 
 }

@@ -612,7 +612,7 @@ public class ClassTester extends Tester {
      * Run all of the groups added so far. All groups are run on a different thread
      * that can eventually timeout
      * 
-     * @param limit the lenght of timeout in milliseconds
+     * @param limit the length of timeout in milliseconds
      */
     protected void runTests(long limit) {
         // I'm sorry about this method...

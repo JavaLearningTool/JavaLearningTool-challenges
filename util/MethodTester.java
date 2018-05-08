@@ -14,16 +14,15 @@ public class MethodTester<O> extends Tester {
     protected String className;
     protected Constructor<?> constructor;
 
-    public MethodTester(String className, String methodName, int modifier, Class<?> returnType, Class<?>...paramTypes) {
+    public MethodTester(String className, String methodName, int modifier, Class<?> returnType,
+            Class<?>... paramTypes) {
 
         if (!failedToForm) {
 
             cls = TestUtils.classExists(className);
             if (cls == null || TestUtils.classIsAbstract(cls) || TestUtils.classIsEnum(cls)
-                || TestUtils.classIsFinal(cls) || TestUtils.classIsInterface(cls)) {
-                setSingleMessageResult("Class not found.",
-                    "Class expected: public class " + className + ".",
-                    false);
+                    || TestUtils.classIsFinal(cls) || TestUtils.classIsInterface(cls)) {
+                setSingleMessageResult("Class not found.", "Class expected: public class " + className + ".", false);
                 failedToForm = true;
                 return;
             }
@@ -31,29 +30,28 @@ public class MethodTester<O> extends Tester {
 
             method = TestUtils.accessibleDeclaredMethodExists(cls, methodName, paramTypes);
             if (method == null) {
-                setSingleMessageResult("Method not found.",
-                    String.format("Method expected: %s.", 
-                                TestUtils.methodToString(modifier, returnType, methodName, paramTypes)), false);
+                setSingleMessageResult("Method not found.", String.format("Method expected: %s.",
+                        TestUtils.methodToString(modifier, returnType, methodName, paramTypes)), false);
                 failedToForm = true;
             } else if (!TestUtils.methodHasReturnType(method, returnType)) {
-                setSingleMessageResult("Method not found.", 
-                    String.format("Method expected: %s.", TestUtils.methodToString(modifier, returnType, methodName, paramTypes)), false);
+                setSingleMessageResult("Method not found.", String.format("Method expected: %s.",
+                        TestUtils.methodToString(modifier, returnType, methodName, paramTypes)), false);
                 failedToForm = true;
             } else if (TestUtils.methodIsAbstract(method)) {
-                setSingleMessageResult("Method is abstract.",
-                    String.format("Method expected: %s.", TestUtils.methodToString(modifier, returnType, methodName, paramTypes)), false);
+                setSingleMessageResult("Method is abstract.", String.format("Method expected: %s.",
+                        TestUtils.methodToString(modifier, returnType, methodName, paramTypes)), false);
                 failedToForm = true;
             } else if (!TestUtils.methodHasModifiers(method, modifier)) {
                 setSingleMessageResult("Method not found.", String.format("Method expected: %s.",
                         TestUtils.methodToString(modifier, returnType, methodName, paramTypes)), false);
                 failedToForm = true;
             } else {
-    
+
                 staticMethod = TestUtils.methodIsStatic(method);
                 this.paramTypes = paramTypes;
-            
+
             }
-            
+
         }
 
     }
@@ -78,7 +76,7 @@ public class MethodTester<O> extends Tester {
         return method;
     }
 
-    public static void useLoosDoubleEquality(MethodTester<Double> t, double epsilon) {
+    public static void useLooseDoubleEquality(MethodTester<Double> t, double epsilon) {
         t.equalityTester = (expected, actual) -> {
 
             if (actual == null || expected == null || !(expected instanceof Double) || !(actual instanceof Double)) {
@@ -106,11 +104,11 @@ public class MethodTester<O> extends Tester {
             if (actual == null || expected == null) {
                 return false;
             }
-            
+
             // This must come first because new lines count as white space
             if (onNewLine) {
                 expected = expected.replaceAll("\\r\\n|\\r|\\n", "");
-                actual = actual.replaceAll("\\r\\n|\\r|\\n", "");                
+                actual = actual.replaceAll("\\r\\n|\\r|\\n", "");
             }
             if (onWhiteSpace) {
                 expected = expected.replaceAll("\\s+", "");

@@ -15,7 +15,7 @@ public class ArrayAverageTest {
         }
 
         // Use double equality with some leniency due to rounding
-        MethodTester.useLoosDoubleEquality(tester, .1);
+        MethodTester.useLooseDoubleEquality(tester, .1);
 
         // test cases
         tester.addArgs(new double[] { 98.7, 100.0, 67.5, 50.2, 89.9 });

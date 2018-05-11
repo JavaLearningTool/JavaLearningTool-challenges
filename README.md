@@ -58,11 +58,15 @@ MethodTester has a method called `useLooseDoubleEquality()` which will set the e
 
 #### Loose String Equality
 
+When working with, creating, or printing Strings it is easy to add or forget a space or new line character.
+
+To combat this, when you have a MethodTester that is testing Strings, you can use loose string equality. This will Strip all spaces and new lines from the Strings you are testing.
+
+MethodTester has a method called `useLooseStringEquality` which will set the equalityTester to use loose String equality.
+
 ## CommandLineStandardOutTester
 
-### Description
-
-These are the simplest kind of tests. The student writes the main method. Input is supplied as Command Line args and the Student makes print statements based on that input. The print statements are tested for accuracy.
+This is a type of MethodTester. These are the simplest kind of tests. The student writes the main method. Input is supplied as Command Line args and the Student makes print statements based on that input. The print statements are tested for accuracy.
 
 ### Creation
 
@@ -80,7 +84,48 @@ The creation of these tests generally follow these steps:
 *   The most common way to use these tests is to simple have the Student's write the main method and test their output. See HelloWorld
 *   It is common to give the student some of the logic for parsing input as part of provided code (provided code is defined in the admin route of the website).
 
+### Example
+
+See HelloWorldTest.java
+
 ## FunctionReturnTester
+
+This is a type of MethodTester. The student writes a method. Input is supplied as parameters to the method and the Student return something based on that input. The returned value is tested for accuracy.
+
+### To String Converters
+
+#### inputToStringConverter
+
+This provides a way for a FunctionReturnTester to convert the input for a test case to a String
+
+#### outputToStringConverter
+
+This provides a way for a FunctionReturnTester to convert the output for a test case to a String
+
+### methodInvoker
+
+FunctionReturnTesters store the method to be tested as a Method object. methodInvoker is given an array of arguments and an object and calls the method to be tested on the given object with the given arguments.
+
+Shortly: methodInvoker tells FunctionReturnTester how to call the method that is being tested.
+
+### Creation
+
+The creation of these tests generally follow these steps:
+
+1.  Write a method that defines the correct functionality for the challenge (This method is by convention called approved).
+2.  Write the main method which should
+    1.  Create an instance of FunctionReturnTester
+    2.  Check and make sure the tester formed properly
+    3.  Set the tester's equalityTester
+    4.  Set the tester's inputToStringConverter
+    5.  Set the tester's outputToStringConverter
+    6.  Set the tester's methodInvoker
+    7.  Add test cases to the tester by calling addArgs (optionally you can create an array of args for each test case and pass it in when calling runTests)
+    8.  Call runTests
+
+### Example
+
+See TheGreatestTest.java
 
 ## ClassTester
 

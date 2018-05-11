@@ -32,7 +32,7 @@ There are methods in Tester that handle retrieving TestResults and methods that 
 
 ### Result Handler
 
-A Tester's resultHander is called whenever a call to runTests has finished.
+A Tester's resultHandler is called whenever a call to runTests has finished.
 
 By default a Tester will print the jsonString of the test results whenever runTests is finished. If you wish to change this you can call `setResultHandler()`.
 
@@ -129,9 +129,54 @@ See TheGreatestTest.java
 
 ## ClassTester
 
-## Tools
+ClassTesters are used to create challenges that test an entire class, including multiple methods, constructors, and fields. For every challenge, you will extend ClassTester to create the tester for the challenge.
 
-## Testing environment
+### EqualityTester
+
+EqualityTester is an enum in the context of ClassTesters (unlike in the context of MethodTesters). Each instance of the enum is a way to tell if two objects are equal.
+
+Most important EqualityTesters
+
+*   `EqualityTester.NONE`: Objects are always equal. Basically saying ignore testing equality on this TestedMember.
+*   `EqualityTester.OBJECT`: Use equals method on the Objects.
+*   `EqualityTester.FLOATING_POINT`: Use loose floating point equality.
+*   `EqualityTester.ARRAY`: Use Arrays.equals()
+*   See EqualityTester.java for more or to add more.
+
+### Stringifier
+
+Stringifier is an enum used when making ClassTesters. Each instance of the enum is a way of converting an Object to a String.
+
+Most important Stringifiers
+
+*   `Stringifier.OBJECT`: use toString() method
+*   `Stringifier.ARRAY`: use Arrays.toString() method
+*   `Stringifier.DEEP_ARRAY` use Arrays.deepToString()
+*   See Stringifer.java for more or to add more.
+
+### TestedMember
+
+TestedMember is an annotation that can be applied to members of the tested class. TestedMember consists of the following fields:
+
+*   `name`: the name of the tested member. For fields and methods the default for name will be the name of the field or method. For constructors the default name is constructor.
+*   `equality`: the EqualityTester to use on this tested member. Default is EqualityTester.NONE which would mean that the equality isn't tested for this TestedMember, we just need to be able to refer to it (This is useful for void methods).
+*   `stringConverter`: the Stringifier for the TestedMember. This will be used for String conversions. Default is Stringifier.OBJECT which converts Objects to Strings using their toString method.
+*   `paramIsClass` This field is only important if the TestedMember is a method. It is an array of ints that tell you which parameters are of type of the tested class (0 indexed). For example if you have a method where the second and third parameters are of the type of the tested class then paramIsClass will look like {1, 2}
+*   `returnIsClass` This field is only important if the TestedMember is a method. It is whether or not the return type of the method is the tested class.
+
+### Creation
+
+1.  Make a class that extends ClassTester.
+2.  Make an inner class that defines the correct functionality for the challenge.
+3.  Annotate each member of that inner class that you wish to test with the TestedMember annotation.
+4.  Write the main method which should create an instance of the class that extends ClassTester.
+5.  Create a constructor for the class that extends ClassTester which:
+    1.  Adds groups to the tester.
+    2.  Calls runTests.
+
+### Example
+
+See PersonClassBuildingTest.java
 
 ## Vocabulary
 

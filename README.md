@@ -1,9 +1,11 @@
+JavaLearningTool-challenges
+
 # Table of contents
 
 *   [Table of contents](#table-of-contents)
 *   [Getting Started](#getting-started)
     *   [File Structure](#file-structure)
-    *   [Creating your first challenge: HelloJava](#creating-your-first-challenge--hellojava)
+    *   [Creating your first challenge-- HelloJava](#creating-your-first-challenge---hellojava)
         *   [Coding](#coding)
         *   [Testing our new challenge](#testing-our-new-challenge)
         *   [Adding More](#adding-more)
@@ -58,7 +60,7 @@ JavaLearningTool-challenges
 All other challenges are also stored in their own folder like above
 ```
 
-## Creating your first challenge: HelloJava
+## Creating your first challenge-- HelloJava
 
 ### Coding
 

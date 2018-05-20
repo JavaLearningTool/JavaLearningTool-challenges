@@ -1,4 +1,261 @@
-# JavaLearningTool challenges
+# Table of contents
+
+*   [Table of contents](#table-of-contents)
+*   [Getting Started](#getting-started)
+    *   [File Structure](#file-structure)
+    *   [Creating your first challenge: HelloJava](#creating-your-first-challenge--hellojava)
+        *   [Coding](#coding)
+        *   [Testing our new challenge](#testing-our-new-challenge)
+        *   [Adding More](#adding-more)
+*   [Detailed Documentation on important classes and concepts](#detailed-documentation-on-important-classes-and-concepts)
+    *   [Tester](#tester)
+        *   [Tester output](#tester-output)
+        *   [Standard Out](#standard-out)
+        *   [Tester Formation](#tester-formation)
+        *   [Test Results](#test-results)
+        *   [Result Handler](#result-handler)
+    *   [MethodTester](#methodtester)
+        *   [Equality Tester](#equality-tester)
+            *   [Loose Double Equality](#loose-double-equality)
+            *   [Loose String Equality](#loose-string-equality)
+    *   [CommandLineStandardOutTester](#commandlinestandardouttester)
+        *   [Creating CommandLineStandardOutTesters](#creating-commandlinestandardouttesters)
+        *   [Common Uses](#common-uses)
+        *   [Example](#example)
+    *   [FunctionReturnTester](#functionreturntester)
+        *   [To String Converters](#to-string-converters)
+            *   [inputToStringConverter](#inputtostringconverter)
+            *   [outputToStringConverter](#outputtostringconverter)
+        *   [methodInvoker](#methodinvoker)
+        *   [Creating FunctionReturnTesters](#creating-functionreturntesters)
+        *   [Example](#example)
+    *   [ClassTester](#classtester)
+        *   [EqualityTester](#equalitytester)
+        *   [Stringifier](#stringifier)
+        *   [TestedMember](#testedmember)
+        *   [Creating ClassTesters](#creating-classtesters)
+        *   [Example](#example)
+    *   [Vocabulary](#vocabulary)
+
+# Getting Started
+
+## File Structure
+
+```
+JavaLearningTool-challenges
+| util: folder with util classes like the different testers are stored in this folder
+|
+| shared: folder with classes that are given to the Students to be used in the challenges are stored here
+|
+| ArrayAverage
+| | ArrayAverageTest.java
+|
+| BirthdayMessage
+| | BirthdayMessageTest.java
+|
+| etc.
+
+All other challenges are also stored in their own folder like above
+```
+
+## Creating your first challenge: HelloJava
+
+### Coding
+
+HelloJava challenge will have students write a main method in the class Test.java that prints out Hello {input} where input is the first command line argument. We will use the [CommandLineStandardOutTester](#commandlinestandardouttester) to create this challenge.
+
+1.  First create a folder to hold your Tester. The folder should have the same name as the challenge so we will name it HelloJava.
+2.  Create a file inside of that folder named HelloJavaTest.java which will hold the code for the Tester.
+3.  Write the approved method:
+
+```
+public class HelloJavaTest {
+    public static void approved(String[] args) {
+        // In this test Students should print out Hello {args[0]}
+        System.out.println("Hello " + args[0]);
+    }
+}
+```
+
+The approved method is the expected solution to the challenge.
+
+4.  Create the main method inside HelloJavaTest.
+5.  Create an instance of [CommandLineStandardOutTester](#commandlinestandardouttester) inside the main method. Provide the constructor a method reference to the expected (approved) method and the name of the class that will hold the actual method. I decided that the Students should make their main method in a class called Test:
+
+```
+public class HelloJavaTest {
+    public static void main(String[] args) {
+        CommandLineStandardOutTester tester = new CommandLineStandardOutTester(HelloJavaTest::approved, "Test");
+    }
+
+    public static void approved(String[] args) {
+        // In this test Students should print out Hello {args[0]}
+        System.out.println("Hello " + args[0]);
+    }
+}
+```
+
+6.  Check and make sure the [tester formed properly](#tester-formation)
+
+```
+public class HelloJavaTest {
+    public static void main(String[] args) {
+        CommandLineStandardOutTester tester = new CommandLineStandardOutTester(HelloJavaTest::approved, "Test");
+
+        if (!tester.didForm()) {
+            // If tester does not form, print out whatever caused it to fail
+            tester.printResults();
+            return;
+        }
+    }
+
+    public static void approved(String[] args) {
+        // In this test Students should print out Hello {args[0]}
+        System.out.println("Hello " + args[0]);
+    }
+}
+```
+
+7.  Add test cases to the tester by calling addArgs. The input to addArgs should be an array of Strings which are the command line args.
+
+```
+public class HelloJavaTest {
+    public static void main(String[] args) {
+        CommandLineStandardOutTester tester = new CommandLineStandardOutTester(HelloJavaTest::approved, "Test");
+
+        if (!tester.didForm()) {
+            // If tester does not form, print out whatever caused it to fail
+            tester.printResults();
+            return;
+        }
+
+        // Test case 1
+        tester.addArgs(new String[]{"World"});
+        // Test case 2
+        tester.addArgs(new String[]{"Java"});
+    }
+
+    public static void approved(String[] args) {
+        // In this test Students should print out Hello {args[0]}
+        System.out.println("Hello " + args[0]);
+    }
+}
+```
+
+*   Each test case is like another call to the main method of the Student's code.
+*   One passes an array of Strings into addArgs where each String is a command line argument.
+
+8.  Call runTests to run all test cases.
+
+```
+public class HelloJavaTest {
+    public static void main(String[] args) {
+        CommandLineStandardOutTester tester = new CommandLineStandardOutTester(HelloJavaTest::approved, "Test");
+
+        if (!tester.didForm()) {
+            // If tester does not form, print out whatever caused it to fail
+            tester.printResults();
+            return;
+        }
+
+        // Test case 1
+        tester.addArgs(new String[]{"World"});
+        // Test case 2
+        tester.addArgs(new String[]{"Java"});
+
+        tester.runTests();
+    }
+
+    public static void approved(String[] args) {
+        // In this test Students should print out Hello {args[0]}
+        System.out.println("Hello " + args[0]);
+    }
+}
+```
+
+### Testing our new challenge
+
+1.  Create a new file in the same folder as the challenge tester that contains sample Student code. It will be called Test.java. Put into Test.java some sample code that a Student might write to try and solve the challenge.
+
+**Don't commit any files that are being used solely for testing!**
+
+2.  Open HelloJava folder and run the below commands and see if the output is as expected (It should be json detailing the results of the test case)
+
+```
+javac Test.java
+javac -cp .:../util:../shared HelloJavaTest.java
+java -cp .:../util:../shared HelloJavaTest
+```
+
+Note that the output will look a little strange. It should be a json array.
+
+### Adding More
+
+You've decided that you want students to print out Hello {input1} {input2} now (where input1 and input2 are the first and second command line arg).
+
+Lets see what changes we have to make to the tester to accommodate this.
+
+1.  We need to update the approved method so that it properly uses the first two commnand line args.
+
+```
+public class HelloJavaTest {
+    public static void main(String[] args) {
+        CommandLineStandardOutTester tester = new CommandLineStandardOutTester(HelloJavaTest::approved, "Test");
+
+        if (!tester.didForm()) {
+            // If tester does not form, print out whatever caused it to fail
+            tester.printResults();
+            return;
+        }
+
+        // Test case 1
+        tester.addArgs(new String[]{"World"});
+        // Test case 2
+        tester.addArgs(new String[]{"Java"});
+
+        tester.runTests();
+    }
+
+    public static void approved(String[] args) {
+        // In this test Students should print out Hello {args[0]}
+        System.out.println("Hello " + args[0] + " " + args[1]);
+    }
+}
+```
+
+2.  We need to update the calls to tester.addArgs because we have to pass in two command line args now instead of one command line arg. Just for fun we'll add two more test cases too although this is not necessary.
+
+```
+public class HelloJavaTest {
+    public static void main(String[] args) {
+        CommandLineStandardOutTester tester = new CommandLineStandardOutTester(HelloJavaTest::approved, "Test");
+
+        if (!tester.didForm()) {
+            // If tester does not form, print out whatever caused it to fail
+            tester.printResults();
+            return;
+        }
+
+        // Test case 1
+        tester.addArgs(new String[]{"Sweet", "World"});
+        // Test case 2
+        tester.addArgs(new String[]{"Java", "10"});
+        // Test case 3
+        tester.addArgs(new String[]{"Fat", "Cat"});
+        // Test case 4
+        tester.addArgs(new String[]{"TestCase", "4"});
+
+        tester.runTests();
+    }
+
+    public static void approved(String[] args) {
+        // In this test Students should print out Hello {args[0]}
+        System.out.println("Hello " + args[0] + " " + args[1]);
+    }
+}
+```
+
+# Detailed Documentation on important classes and concepts
 
 ## Tester
 
@@ -68,7 +325,7 @@ MethodTester has a method called `useLooseStringEquality` which will set the equ
 
 This is a type of MethodTester. These are the simplest kind of tests. The student writes the main method. Input is supplied as Command Line args and the Student makes print statements based on that input. The print statements are tested for accuracy.
 
-### Creation
+### Creating CommandLineStandardOutTesters
 
 The creation of these tests generally follow these steps:
 
@@ -108,7 +365,7 @@ FunctionReturnTesters store the method to be tested as a Method object. methodIn
 
 Shortly: methodInvoker tells FunctionReturnTester how to call the method that is being tested.
 
-### Creation
+### Creating FunctionReturnTesters
 
 The creation of these tests generally follow these steps:
 
@@ -164,7 +421,7 @@ TestedMember is an annotation that can be applied to members of the tested class
 *   `paramIsClass` This field is only important if the TestedMember is a method. It is an array of ints that tell you which parameters are of type of the tested class (0 indexed). For example if you have a method where the second and third parameters are of the type of the tested class then paramIsClass will look like {1, 2}
 *   `returnIsClass` This field is only important if the TestedMember is a method. It is whether or not the return type of the method is the tested class.
 
-### Creation
+### Creating ClassTesters
 
 1.  Make a class that extends ClassTester.
 2.  Make an inner class that defines the correct functionality for the challenge.

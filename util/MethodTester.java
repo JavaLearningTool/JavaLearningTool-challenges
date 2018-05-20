@@ -3,7 +3,7 @@ import java.lang.reflect.Modifier;
 import java.lang.reflect.Method;
 import java.lang.reflect.Constructor;
 
-public class MethodTester<O> extends Tester {
+public abstract class MethodTester<O> extends Tester {
 
     protected BiPredicate<O, O> equalityTester;
     protected Method method;

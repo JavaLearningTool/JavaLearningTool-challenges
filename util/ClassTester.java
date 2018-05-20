@@ -614,7 +614,7 @@ public class ClassTester extends Tester {
      * 
      * @param limit the length of timeout in milliseconds
      */
-    protected void runTests(long limit) {
+    public void runTests(long limit) {
         // I'm sorry about this method...
 
         // Atomic Integer that stores which group is being tested

@@ -65,7 +65,7 @@ public abstract class Tester {
         return !failedToForm;
     }
 
-    public ArrayList<TestResult> getResults() {
+    public List<TestResult> getResults() {
         return results;
     }
 

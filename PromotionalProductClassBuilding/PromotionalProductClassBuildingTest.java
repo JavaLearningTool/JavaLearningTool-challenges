@@ -68,7 +68,7 @@ public class PromotionalProductClassBuildingTest extends ClassTester {
 
         @TestedMember(equality = EqualityTester.OBJECT)
         public String toString() {
-            return String.format("%s is selling for %f%% its regular price", getName(), promotionRate * 100);
+            return String.format("%s is selling for %.1f%% its regular price", getName(), promotionRate * 100);
         }
     }
 }

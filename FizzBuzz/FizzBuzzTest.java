@@ -16,6 +16,9 @@ public class FizzBuzzTest {
         tester.addArgs(new String[] { "6" });
         tester.addArgs(new String[] { "8" });
 
+        // Use loose String equality for new lines but not spaces
+        MethodTester.useLooseStringEquality(tester, false, true);
+
         tester.runTests();
     }
 

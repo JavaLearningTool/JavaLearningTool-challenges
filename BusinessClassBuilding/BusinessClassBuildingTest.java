@@ -29,9 +29,9 @@ public class BusinessClassBuildingTest extends ClassTester {
         sellItems(names[1], 7, products[1]);
         sellItems(names[2], 15, products[2]);
 
-        buyProductStock(names[1], 25.2, products[0]);
+        buyProductStock(names[0], 25.2, products[0]);
         buyProductStock(names[1], 701, products[1]);
-        buyProductStock(names[2], 1, products[2]);
+        buyProductStock(names[2], 1, products[0]);
 
         addToStringTest(names[0], products[0]);
         addToStringTest(names[2], products[2]);

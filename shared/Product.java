@@ -1,20 +1,21 @@
 /**
- * Product class represents a product.
- * This class is primarily made for extension but you may still instantiate
- * a Product if you want.
+ * Product class represents a product. This class is primarily made for
+ * extension but you may still instantiate a Product if you want.
  *
  * Products have a name, id, and price
  */
 public class Product {
 
+    @TestedMember(equality = EqualityTester.OBJECT)
     private String name;
+    @TestedMember(equality = EqualityTester.FLOATING_POINT)
     private double price;
 
     private final long id;
 
     /**
-     * Initializes a Product with the given name and price. The product is
-     * assigned an id
+     * Initializes a Product with the given name and price. The product is assigned
+     * an id
      * 
      * @param name  The Product's name
      * @param price The Product's price
@@ -28,7 +29,7 @@ public class Product {
     /**
      * Returns the price for the specified amount of this product
      * 
-     * @param amount    The amount of the product
+     * @param amount The amount of the product
      * @return The price of amount units of this product
      */
     public double getPriceOfAmount(int amount) {
@@ -43,7 +44,7 @@ public class Product {
     }
 
     /**
-     * @param name  the new name of the product
+     * @param name the new name of the product
      */
     public void setName(String name) {
         this.name = name;
@@ -79,8 +80,8 @@ public class Product {
 
     @Override
     /**
-     * An Object is equal to this Product if the Object is an instance of
-     * Product and all fields are equal
+     * An Object is equal to this Product if the Object is an instance of Product
+     * and all fields are equal
      * 
      * @param other The object to test equality with
      * @return true if the Object is equal to this, false otherwise

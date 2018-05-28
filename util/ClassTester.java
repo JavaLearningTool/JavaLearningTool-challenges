@@ -14,6 +14,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
+import java.util.function.BiConsumer;
 import java.util.stream.IntStream;
 
 /**
@@ -130,8 +131,16 @@ public class ClassTester extends Tester {
         Method[] actualMethods = actual.getDeclaredMethods();
         Constructor[] constructors = expected.getDeclaredConstructors();
         Constructor[] actualConstructors = actual.getDeclaredConstructors();
+
+        /**
+         * We're looking for fields in tested class and the super classes of tested
+         * class.
+         */
         Field[] fields = expected.getDeclaredFields();
         Field[] actualFields = actual.getDeclaredFields();
+        List<Field> parentFields = TestUtils.getAllSuperFields(expected);
+        List<Field> actualAllFields = TestUtils.getAllSuperFields(expected);
+        actualAllFields.addAll(Arrays.asList(actualFields));
 
         // Extract all methods annotated as being a TestedMember from expected class
         for (Method m : methods) {
@@ -226,15 +235,14 @@ public class ClassTester extends Tester {
             }
         }
 
-        // Extract fields annotated as TestedMembers from expected class
-        for (Field f : fields) {
+        BiConsumer<Field, Boolean> fieldHandler = (f, isFromSuper) -> {
             // Loop through each of the field's annotations
             for (Annotation annot : f.getAnnotations()) {
                 // If one of the annotations is TestedMember
                 if (annot instanceof TestedMember) {
-                    // Find the matching field from the actual class
+                    // Find the matching field from the actual class or super class of actual class
                     Field actualField = null;
-                    for (Field field : actualFields) {
+                    for (Field field : actualAllFields) {
                         if (TestUtils.fieldEquals(field, f)) {
                             actualField = field;
                             break;
@@ -257,11 +265,24 @@ public class ClassTester extends Tester {
                         }
 
                         // Create a TestableField and add it to the field map
-                        fieldMap.put(annotName,
-                                new TestableField(f, actualField, annotation.equality(), annotation.stringConverter()));
+                        fieldMap.put(annotName, new TestableField(f, actualField, annotation.equality(),
+                                annotation.stringConverter(), isFromSuper));
                     }
                 }
             }
+        };
+
+        // Extract fields annotated as TestedMembers from expected class
+        for (Field f : fields) {
+            fieldHandler.accept(f, false);
+        }
+
+        /*
+         * Extract fields annotated as TestedMembers from super classes to the expected
+         * class
+         */
+        for (Field f : parentFields) {
+            fieldHandler.accept(f, true);
         }
     }
 
@@ -1181,6 +1202,9 @@ public class ClassTester extends Tester {
         private Field field;
         private Field actualField;
 
+        // Whether or not the field is from a super class of the tested class
+        private boolean isFromSuper;
+
         // Tests the equality of the values of the field
         private EqualityTester equalityTester;
 
@@ -1195,11 +1219,13 @@ public class ClassTester extends Tester {
          * @param equalityTester tests the equality of the values of this field
          * @param toString       converts the value of this field to a String
          */
-        public TestableField(Field field, Field actualField, EqualityTester equalityTester, Stringifier toString) {
+        public TestableField(Field field, Field actualField, EqualityTester equalityTester, Stringifier toString,
+                boolean isFromSuper) {
             this.field = field;
             this.actualField = actualField;
             this.equalityTester = equalityTester;
             this.toString = toString;
+            this.isFromSuper = isFromSuper;
 
             /*
              * The following must be done so that we can reflectively set and get the value
@@ -1239,6 +1265,9 @@ public class ClassTester extends Tester {
             // If they aren't equal, return a TestResult saying so
             if (!fieldsEqual(expectedObj, actualObj)) {
                 String testingLabel = "Testing " + field.getName() + " field";
+                if (isFromSuper) {
+                    testingLabel += " from super class";
+                }
 
                 // Make the action look like a comment
                 actions.add("// " + testingLabel + " ... Set incorrectly.");

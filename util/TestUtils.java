@@ -2,6 +2,8 @@ import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
+import java.util.List;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.stream.IntStream;
 
@@ -175,7 +177,8 @@ public class TestUtils {
         return true;
     }
 
-    public static boolean methodEquals(Method expectedMethod, Method actualMethod, boolean returnIsClass, int[] paramIsClass, Class<?> actual) {
+    public static boolean methodEquals(Method expectedMethod, Method actualMethod, boolean returnIsClass,
+            int[] paramIsClass, Class<?> actual) {
 
         if (expectedMethod == null || actualMethod == null) {
             return false;
@@ -308,6 +311,23 @@ public class TestUtils {
         return method.isVarArgs();
     }
 
+    /**
+     * Gets all of the fields in all of the super classes.
+     * 
+     * @return a list of all fields in all super classes.
+     */
+    public static List<Field> getAllSuperFields(Class<?> cls) {
+        cls = cls.getSuperclass();
+        List<Field> ret = new ArrayList<>();
+
+        while (cls != null) {
+            ret.addAll(Arrays.asList(cls.getDeclaredFields()));
+            cls = cls.getSuperclass();
+        }
+
+        return ret;
+    }
+
     // Not sure about this name
     public static Field accessibleDeclaredFieldExists(Class<?> cls, String fieldName, Class<?> fieldType) {
         Field field = null;
@@ -342,6 +362,14 @@ public class TestUtils {
         }
 
         if (!f1.getName().equals(f2.getName())) {
+            return false;
+        }
+
+        /*
+         * If the fields aren't from the same class. This has a potential to go wrong if
+         * the tested class has the same name as another class
+         */
+        if (!f1.getDeclaringClass().getSimpleName().equals(f2.getDeclaringClass().getSimpleName())) {
             return false;
         }
 

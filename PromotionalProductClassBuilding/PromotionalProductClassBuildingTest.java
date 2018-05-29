@@ -32,6 +32,9 @@ public class PromotionalProductClassBuildingTest extends ClassTester {
         String pName = p.getName();
         double pAmount = p.getPrice();
 
+        startGroup("Testing Promotions.");
+        addFormatConstructor("constructor", "PromotionalProduct %s = new PromotionalProduct(\"%s\", %.2f);", "p", pName,
+                pAmount);
         addFieldTest("p", "name");
         addFieldTest("p", "price");
     }

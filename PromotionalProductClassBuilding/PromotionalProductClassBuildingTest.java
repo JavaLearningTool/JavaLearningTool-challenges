@@ -7,6 +7,8 @@ public class PromotionalProductClassBuildingTest extends ClassTester {
     public PromotionalProductClassBuildingTest() {
         super("PromotionalProductClassBuildingTest$PromotionalProduct", "PromotionalProduct");
 
+        setFieldLimit(1);
+
         if (!didForm()) {
             printResults();
             return;

@@ -89,6 +89,10 @@ public class ClassTester extends Tester {
      */
     public ClassTester(String expectedClass, String actualClass) {
 
+        if (failedToForm) {
+            return;
+        }
+
         // assign singleton
         tester = this;
 
@@ -283,6 +287,34 @@ public class ClassTester extends Tester {
          */
         for (Field f : parentFields) {
             fieldHandler.accept(f, true);
+        }
+    }
+
+    /**
+     * Tests to see if submitted code has limit or fewer fields
+     * 
+     * If you're going to call this method it should be called before you check if
+     * the tester has been formed.
+     * 
+     * @param limit how many fields student code is allowed to have.
+     */
+    public void setFieldLimit(int limit) {
+        if (failedToForm) {
+            return;
+        }
+
+        Field[] actualFields = actual.getDeclaredFields();
+        if (actualFields.length > limit) {
+            failedToForm = true;
+            if (limit == 0) {
+                setSingleMessageResult("Too many fields.", "You may not use any fields in this challenge.", false);
+            } else if (limit == 1) {
+                setSingleMessageResult("Too many fields.", "You may only use 1 field in this challenge.", false);
+            } else {
+                setSingleMessageResult("Too many fields.", "You may only use " + limit + " fields in this challenge.",
+                        false);
+            }
+
         }
     }
 
@@ -637,6 +669,10 @@ public class ClassTester extends Tester {
      */
     public void runTests(long limit) {
         // I'm sorry about this method...
+
+        if (failedToForm) {
+            throw new RuntimeException("Can't use a tester that didn't fully form.");
+        }
 
         // Atomic Integer that stores which group is being tested
         final AtomicInteger numGroup = new AtomicInteger();

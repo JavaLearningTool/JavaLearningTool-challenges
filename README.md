@@ -12,7 +12,6 @@ JavaLearningTool-challenges
     *   [Creating a FunctionReturnTester -- GridFinder](#creating-a-functionreturntester----gridfinder)
         *   [Coding](#coding)
         *   [Testing our new challenge](#testing-our-new-challenge)
-        *   [Adding More](#adding-more)
 *   [Detailed Documentation on important classes and concepts](#detailed-documentation-on-important-classes-and-concepts)
     *   [Tester](#tester)
         *   [Tester output](#tester-output)
@@ -559,7 +558,7 @@ public class GridFinderTest {
     }
     ```
 
-1.  Add test cases to the tester by calling addArgs. The input to addArgs should be an array of Objects which are the parameters to the method.
+9.  Add test cases to the tester by calling addArgs. The input to addArgs should be an array of Objects which are the parameters to the method.
 
     First we're gonna make some grids that we can reuse as arguments them we'll add the test cases.
 

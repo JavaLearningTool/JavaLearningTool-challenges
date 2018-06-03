@@ -57,6 +57,11 @@ public abstract class MethodTester<O> extends Tester {
     }
 
     public void noArgsConstructor() {
+
+        if (failedToForm) {
+            return;
+        }
+
         constructor = TestUtils.hasAccessibleConstructor(cls, new Class<?>[] {});
         if (constructor == null) {
             setSingleMessageResult("Constructor not found.", "No args constructor not found.", false);

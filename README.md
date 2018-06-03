@@ -2,42 +2,46 @@ JavaLearningTool-challenges
 
 # Table of contents
 
-- [Table of contents](#table-of-contents)
-- [Getting Started](#getting-started)
-    - [File Structure](#file-structure)
-    - [Creating your first challenge-- HelloJava](#creating-your-first-challenge---hellojava)
-        - [Coding](#coding)
-        - [Testing our new challenge](#testing-our-new-challenge)
-        - [Adding More](#adding-more)
-- [Detailed Documentation on important classes and concepts](#detailed-documentation-on-important-classes-and-concepts)
-    - [Tester](#tester)
-        - [Tester output](#tester-output)
-        - [Standard Out](#standard-out)
-        - [Tester Formation](#tester-formation)
-        - [Test Results](#test-results)
-        - [Result Handler](#result-handler)
-    - [MethodTester](#methodtester)
-        - [Equality Tester](#equality-tester)
-            - [Loose Double Equality](#loose-double-equality)
-            - [Loose String Equality](#loose-string-equality)
-    - [CommandLineStandardOutTester](#commandlinestandardouttester)
-        - [Creating CommandLineStandardOutTesters](#creating-commandlinestandardouttesters)
-        - [Common Uses](#common-uses)
-        - [Example](#example)
-    - [FunctionReturnTester](#functionreturntester)
-        - [To String Converters](#to-string-converters)
-            - [inputToStringConverter](#inputtostringconverter)
-            - [outputToStringConverter](#outputtostringconverter)
-        - [methodInvoker](#methodinvoker)
-        - [Creating FunctionReturnTesters](#creating-functionreturntesters)
-        - [Example](#example)
-    - [ClassTester](#classtester)
-        - [EqualityTester](#equalitytester)
-        - [Stringifier](#stringifier)
-        - [TestedMember](#testedmember)
-        - [Creating ClassTesters](#creating-classtesters)
-        - [Example](#example)
-    - [Vocabulary](#vocabulary)
+*   [Table of contents](#table-of-contents)
+*   [Getting Started](#getting-started)
+    *   [File Structure](#file-structure)
+    *   [Creating your first challenge -- HelloJava](#creating-your-first-challenge----hellojava)
+        *   [Coding](#coding)
+        *   [Testing our new challenge](#testing-our-new-challenge)
+        *   [Adding More](#adding-more)
+    *   [Creating a FunctionReturnTester -- GridFinder](#creating-a-functionreturntester----gridfinder)
+        *   [Coding](#coding)
+        *   [Testing our new challenge](#testing-our-new-challenge)
+        *   [Adding More](#adding-more)
+*   [Detailed Documentation on important classes and concepts](#detailed-documentation-on-important-classes-and-concepts)
+    *   [Tester](#tester)
+        *   [Tester output](#tester-output)
+        *   [Standard Out](#standard-out)
+        *   [Tester Formation](#tester-formation)
+        *   [Test Results](#test-results)
+        *   [Result Handler](#result-handler)
+    *   [MethodTester](#methodtester)
+        *   [Equality Tester](#equality-tester)
+            *   [Loose Double Equality](#loose-double-equality)
+            *   [Loose String Equality](#loose-string-equality)
+    *   [CommandLineStandardOutTester](#commandlinestandardouttester)
+        *   [Creating CommandLineStandardOutTesters](#creating-commandlinestandardouttesters)
+        *   [Common Uses](#common-uses)
+        *   [Example](#example)
+    *   [FunctionReturnTester](#functionreturntester)
+        *   [To String Converters](#to-string-converters)
+            *   [inputToStringConverter](#inputtostringconverter)
+            *   [outputToStringConverter](#outputtostringconverter)
+        *   [methodInvoker](#methodinvoker)
+        *   [Creating FunctionReturnTesters](#creating-functionreturntesters)
+        *   [Example](#example)
+    *   [ClassTester](#classtester)
+        *   [EqualityTester](#equalitytester)
+        *   [Stringifier](#stringifier)
+        *   [TestedMember](#testedmember)
+        *   [Creating ClassTesters](#creating-classtesters)
+        *   [Example](#example)
+    *   [Vocabulary](#vocabulary)
 
 # Getting Started
 
@@ -60,17 +64,17 @@ JavaLearningTool-challenges
 All other challenges are also stored in their own folder like above
 ```
 
-## Creating your first challenge-- HelloJava
+## Creating your first challenge -- HelloJava
 
 ### Coding
 
 HelloJava challenge will have students write a main method in the class Test.java that prints out Hello {input} where input is the first command line argument. We will use the [CommandLineStandardOutTester](#commandlinestandardouttester) to create this challenge.
 
 1.  First create a folder to hold your Tester. The folder should have the same name as the challenge so we will name it HelloJava.
-2.  Create a file inside of that folder named HelloJavaTest.java which will hold the code for the Tester.
+2.  Create a file inside of that folder named HelloJavaTest.java which will hold the code for the Tester. Tester file must be named "{ChallengeName}Test.java."
 3.  Write the approved method:
 
-```
+```Java
 public class HelloJavaTest {
     public static void approved(String[] args) {
         // In this test Students should print out Hello {args[0]}
@@ -84,7 +88,7 @@ The approved method is the expected solution to the challenge.
 4.  Create the main method inside HelloJavaTest.
 5.  Create an instance of [CommandLineStandardOutTester](#commandlinestandardouttester) inside the main method. Provide the constructor a method reference to the expected (approved) method and the name of the class that will hold the actual method. I decided that the Students should make their main method in a class called Test:
 
-```
+```Java
 public class HelloJavaTest {
     public static void main(String[] args) {
         CommandLineStandardOutTester tester = new CommandLineStandardOutTester(HelloJavaTest::approved, "Test");
@@ -99,7 +103,7 @@ public class HelloJavaTest {
 
 6.  Check and make sure the [tester formed properly](#tester-formation)
 
-```
+```Java
 public class HelloJavaTest {
     public static void main(String[] args) {
         CommandLineStandardOutTester tester = new CommandLineStandardOutTester(HelloJavaTest::approved, "Test");
@@ -120,7 +124,7 @@ public class HelloJavaTest {
 
 7.  Add test cases to the tester by calling addArgs. The input to addArgs should be an array of Strings which are the command line args.
 
-```
+```Java
 public class HelloJavaTest {
     public static void main(String[] args) {
         CommandLineStandardOutTester tester = new CommandLineStandardOutTester(HelloJavaTest::approved, "Test");
@@ -149,7 +153,7 @@ public class HelloJavaTest {
 
 8.  Call runTests to run all test cases.
 
-```
+```Java
 public class HelloJavaTest {
     public static void main(String[] args) {
         CommandLineStandardOutTester tester = new CommandLineStandardOutTester(HelloJavaTest::approved, "Test");
@@ -198,7 +202,7 @@ Lets see what changes we have to make to the tester to accommodate this.
 
 1.  We need to update the approved method so that it properly uses the first two commnand line args.
 
-```
+```Java
 public class HelloJavaTest {
     public static void main(String[] args) {
         CommandLineStandardOutTester tester = new CommandLineStandardOutTester(HelloJavaTest::approved, "Test");
@@ -226,7 +230,7 @@ public class HelloJavaTest {
 
 2.  We need to update the calls to tester.addArgs because we have to pass in two command line args now instead of one command line arg. Just for fun we'll add two more test cases too although this is not necessary.
 
-```
+```Java
 public class HelloJavaTest {
     public static void main(String[] args) {
         CommandLineStandardOutTester tester = new CommandLineStandardOutTester(HelloJavaTest::approved, "Test");
@@ -255,6 +259,543 @@ public class HelloJavaTest {
     }
 }
 ```
+
+## Creating a FunctionReturnTester -- GridFinder
+
+### Coding
+
+GridFinder challenge will have students write a method named findNumInGrid in the class Test.java that returns the number of occurrences of a specified int in a 2D array of ints. We will use the [FunctionReturnTester](#functionreturntester) to create this challenge.
+
+1.  First create a folder to hold your Tester. The folder should have the same name as the challenge so we will name it GridFinder.
+2.  Create a file inside of that folder named GridFinderTest.java which will hold the code for the Tester. (Tester file must be named "{ChallengeName}Test.java)."
+3.  Write the approved method:
+
+    The approved method will be used to get the expected output from the method being tested based on the input. In our case the input will be an int[][] called grid and an int called seek. Parameters are always passed to the approved method as an Object[] where each index in the array is an argument to the method being tested. We only care about the first two indexes because we have only two arguments. We will have to cast the first index of the Object[] to an int[][] (grid) and the second to an Integer (seek).
+
+```Java
+public class GridFinderTest {
+
+    public static int approved(Object[] args) {
+
+        // Get parameters out of Object[]
+        int[][] grid = (int[][]) args[0];
+
+        // Must cast as Integer because you can't cast an Object to an int
+        int seek = (Integer) args[1];
+
+        // Logic for accomplishing challenge
+        int count = 0;
+
+        for (int i = 0; i < grid.length; i++) {
+            for (int j = 0; j < grid[i].length; j++) {
+                if (grid[i][j] == seek) {
+                    count++;
+                }
+            }
+        }
+
+        return count;
+    }
+}
+```
+
+The approved method is the expected solution to the challenge.
+
+4.  Create the main method inside GridFinderTest.
+5.  Create an instance of [FuntionReturnTester](#functionreturntester) inside the main method:
+
+    FunctionReturnTester is a generic class. You give it the type of what the tested method should return. findNumInGrid will return an int so we give the FunctionReturnTester the type of Integer.
+
+    `FunctionReturnTester<Integer> tester`
+
+    Provide the constructor a method reference to the expected (approved) method, the name of the class that will hold the actual method, the name of the actual method, the return type and finally the parameter types. I decided that the Students should make their findNumInGrid method in a class called Test.
+
+```Java
+public class GridFinderTest {
+
+    public static void main(String[] args) {
+
+        // Make tester for this Challenge
+        FunctionReturnTester<Integer> tester = new FunctionReturnTester<>(GridFinderTest::approved, // Expected method
+                "Test", // Name of class
+                "findNumInGrid", // Name of method being tested
+                int.class, // Return type
+                int[][].class, // Type of first parameter
+                int.class // Type of second parameter
+        );
+    }
+
+    public static int approved(Object[] args) {
+
+        // Get parameters out of Object[]
+        int[][] grid = (int[][]) args[0];
+
+        // Must cast as Integer because you can't cast an Object to an int
+        int seek = (Integer) args[1];
+
+        // Logic for accomplishing challenge
+        int count = 0;
+
+        for (int i = 0; i < grid.length; i++) {
+            for (int j = 0; j < grid[i].length; j++) {
+                if (grid[i][j] == seek) {
+                    count++;
+                }
+            }
+        }
+
+        return count;
+    }
+}
+```
+
+6.  If you want the students to write a non-static method, in this case I do, then call noArgsConstructor method on the tester to make an instance of the class to test on.
+
+```Java
+import java.util.Arrays;
+
+public class GridFinderTest {
+
+    public static void main(String[] args) {
+
+        // Make tester for this Challenge
+        FunctionReturnTester<Integer> tester = new FunctionReturnTester<>(GridFinderTest::approved, // Expected method
+                "Test", // Name of class
+                "findNumInGrid", // Name of method being tested
+                int.class, // Return type
+                int[][].class, // Type of first parameter
+                int.class // Type of second parameter
+        );
+        tester.noArgsConstructor();
+    }
+
+    public static int approved(Object[] args) {
+
+        // Get parameters out of Object[]
+        int[][] grid = (int[][]) args[0];
+
+        // Must cast as Integer because you can't cast an Object to an int
+        int seek = (Integer) args[1];
+
+        // Logic for accomplishing challenge
+        int count = 0;
+
+        for (int i = 0; i < grid.length; i++) {
+            for (int j = 0; j < grid[i].length; j++) {
+                if (grid[i][j] == seek) {
+                    count++;
+                }
+            }
+        }
+
+        return count;
+    }
+}
+```
+
+7.  Add code that checks to make sure the [tester formed properly](#tester-formation).
+
+```Java
+import java.util.Arrays;
+
+public class GridFinderTest {
+
+    public static void main(String[] args) {
+
+        // Make tester for this Challenge
+        FunctionReturnTester<Integer> tester = new FunctionReturnTester<>(GridFinderTest::approved, // Expected method
+                "Test", // Name of class
+                "findNumInGrid", // Name of method being tested
+                int.class, // Return type
+                int[][].class, // Type of first parameter
+                int.class // Type of second parameter
+        );
+        tester.noArgsConstructor();
+
+        if (!tester.didForm()) {
+            tester.printResults();
+            return;
+        }
+    }
+
+    public static int approved(Object[] args) {
+
+        // Get parameters out of Object[]
+        int[][] grid = (int[][]) args[0];
+
+        // Must cast as Integer because you can't cast an Object to an int
+        int seek = (Integer) args[1];
+
+        // Logic for accomplishing challenge
+        int count = 0;
+
+        for (int i = 0; i < grid.length; i++) {
+            for (int j = 0; j < grid[i].length; j++) {
+                if (grid[i][j] == seek) {
+                    count++;
+                }
+            }
+        }
+
+        return count;
+    }
+}
+```
+
+8.  Next we have to give the tester some basic information about how to accomplish the following tasks:
+
+    *   Test equality between the return values of the expected and actual methods.
+        ```Java
+        // Use Integer's equal method to test return values from expected and actual class
+        tester.setEqualityTester(Integer::equals);
+        ```
+    *   Convert the input of a test case to a String
+
+        ```Java
+        // Provide tester with a way to turn arguments into a String.
+        tester.setInputToStringConverter((arg) -> {
+            // Parameter one is the grid
+            int[][] arg1 = (int[][]) arg[0];
+            // Parameter two is the number to seek
+            int arg2 = (Integer) arg[1];
+
+            return "grid: " + Arrays.deepToString(arg1) + " seek: " + arg2;
+        });
+        ```
+
+    *   Convert the output of a test case to a String.
+        ```Java
+        // Convert return value to a String
+        tester.setOutputToStringConverter(out -> out + "");
+        ```
+    *   Call the method based on an array of the arguments
+
+        ```Java
+        // Show the tester how to parse args and call the actual version of the method
+        tester.setMethodInvoker((obj, arg) -> {
+            // Parameter one is the grid
+            int[][] arg1 = (int[][]) arg[0];
+            // Parameter two is the number to seek
+            int arg2 = (Integer) arg[1];
+
+            // tester.getMethod() will return t
+            return tester.getMethod().invoke(obj, arg1, arg2);
+        });
+        ```
+
+    All together:
+
+    ```Java
+    import java.util.Arrays;
+
+    public class GridFinderTest {
+
+        public static void main(String[] args) {
+
+            // Make tester for this Challenge
+            FunctionReturnTester<Integer> tester = new FunctionReturnTester<>(GridFinderTest::approved, // Expected method
+                    "Test", // Name of class
+                    "findNumInGrid", // Name of method being tested
+                    int.class, // Return type
+                    int[][].class, // Type of first parameter
+                    int.class // Type of second parameter
+            );
+            tester.noArgsConstructor();
+
+            if (!tester.didForm()) {
+                tester.printResults();
+                return;
+            }
+
+            // Use Integer's equals to test return values from expected and actual method
+            tester.setEqualityTester(Integer::equals);
+
+            // Provide tester with a way to turn arguments into a String
+            tester.setInputToStringConverter((arg) -> {
+                // Parameter one is the grid
+                int[][] arg1 = (int[][]) arg[0];
+                // Parameter two is the number to seek
+                int arg2 = (Integer) arg[1];
+
+                return "grid: " + Arrays.deepToString(arg1) + " seek: " + arg2;
+            });
+
+            // Convert return value to a String
+            tester.setOutputToStringConverter(out -> out + "");
+
+            // Show the tester how to parse args and call the actual version of the method
+            tester.setMethodInvoker((obj, arg) -> {
+                // Parameter one is the grid
+                int[][] arg1 = (int[][]) arg[0];
+                // Parameter two is the number to seek
+                int arg2 = (Integer) arg[1];
+
+                // tester.getMethod() will return the actual method
+                return tester.getMethod().invoke(obj, arg1, arg2);
+            });
+        }
+
+        public static int approved(Object[] args) {
+
+            // Get parameters out of Object[]
+            int[][] grid = (int[][]) args[0];
+
+            // Must cast as Integer because you can't cast an Object to an int
+            int seek = (Integer) args[1];
+
+            // Logic for accomplishing challenge
+            int count = 0;
+
+            for (int i = 0; i < grid.length; i++) {
+                for (int j = 0; j < grid[i].length; j++) {
+                    if (grid[i][j] == seek) {
+                        count++;
+                    }
+                }
+            }
+
+            return count;
+        }
+    }
+    ```
+
+1.  Add test cases to the tester by calling addArgs. The input to addArgs should be an array of Objects which are the parameters to the method.
+
+    First we're gonna make some grids that we can reuse as arguments them we'll add the test cases.
+
+```Java
+import java.util.Arrays;
+
+public class GridFinderTest {
+
+    public static void main(String[] args) {
+
+        // Make tester for this Challenge
+        FunctionReturnTester<Integer> tester = new FunctionReturnTester<>(GridFinderTest::approved, // Expected method
+                "Test", // Name of class
+                "findNumInGrid", // Name of method being tested
+                int.class, // Return type
+                int[][].class, // Type of first parameter
+                int.class // Type of second parameter
+        );
+        tester.noArgsConstructor();
+
+        if (!tester.didForm()) {
+            tester.printResults();
+            return;
+        }
+
+        // Use Integer's equals to test return values from expected and actual method
+        tester.setEqualityTester(Integer::equals);
+
+        // Provide tester with a way to turn arguments into a String
+        tester.setInputToStringConverter((arg) -> {
+            // Parameter one is the grid
+            int[][] arg1 = (int[][]) arg[0];
+            // Parameter two is the number to seek
+            int arg2 = (Integer) arg[1];
+
+            return "grid: " + Arrays.deepToString(arg1) + " seek: " + arg2;
+        });
+
+        // Convert return value to a String
+        tester.setOutputToStringConverter(out -> out + "");
+
+        // Show the tester how to parse args and call the actual version of the method
+        tester.setMethodInvoker((obj, arg) -> {
+            // Parameter one is the grid
+            int[][] arg1 = (int[][]) arg[0];
+            // Parameter two is the number to seek
+            int arg2 = (Integer) arg[1];
+
+            // tester.getMethod() will return the actual method
+            return tester.getMethod().invoke(obj, arg1, arg2);
+        });
+
+        // Even grid to use for testing
+        int[][] evenArray = new int[][] { { 1, 2, 3, 4 }, { 5, 6, 7, 8 }, { 9, 1, 1, 3 } };
+        // Jagged grid to use for testing
+        int[][] jaggedArray = new int[][] { { 1, 2, 3, 4 }, { 5 }, { 9, 1, 1, 3, 5, 6 } };
+
+        // test cases
+
+        // Count the number of 1s in evenArray
+        tester.addArgs(new Object[] { evenArray, 1 });
+
+        // Count the number of 3s in evenArray
+        tester.addArgs(new Object[] { evenArray, 3 });
+
+        // Count the number of 12s in evenArray
+        tester.addArgs(new Object[] { evenArray, 12 });
+
+        // Count the number of 5s in jaggedArray
+        tester.addArgs(new Object[] { jaggedArray, 5 });
+
+        // Count the number of 4s in jaggedArray
+        tester.addArgs(new Object[] { jaggedArray, 4 });
+    }
+
+    public static int approved(Object[] args) {
+
+        // Get parameters out of Object[]
+        int[][] grid = (int[][]) args[0];
+
+        // Must cast as Integer because you can't cast an Object to an int
+        int seek = (Integer) args[1];
+
+        // Logic for accomplishing challenge
+        int count = 0;
+
+        for (int i = 0; i < grid.length; i++) {
+            for (int j = 0; j < grid[i].length; j++) {
+                if (grid[i][j] == seek) {
+                    count++;
+                }
+            }
+        }
+
+        return count;
+    }
+}
+```
+
+*   Each test case is like another call to the main method of the Student's code.
+*   One passes an array of Strings into addArgs where each String is a command line argument.
+
+10. Call runTests to run all test cases.
+
+```Java
+import java.util.Arrays;
+
+public class GridFinderTest {
+
+    public static void main(String[] args) {
+
+        // Make tester for this Challenge
+        FunctionReturnTester<Integer> tester = new FunctionReturnTester<>(GridFinderTest::approved, // Expected method
+                "Test", // Name of class
+                "findNumInGrid", // Name of method being tested
+                int.class, // Return type
+                int[][].class, // Type of first parameter
+                int.class // Type of second parameter
+        );
+        tester.noArgsConstructor();
+
+        if (!tester.didForm()) {
+            tester.printResults();
+            return;
+        }
+
+        // Use Integer's equals to test return values from expected and actual method
+        tester.setEqualityTester(Integer::equals);
+
+        // Provide tester with a way to turn arguments into a String
+        tester.setInputToStringConverter((arg) -> {
+            // Parameter one is the grid
+            int[][] arg1 = (int[][]) arg[0];
+            // Parameter two is the number to seek
+            int arg2 = (Integer) arg[1];
+
+            return "grid: " + Arrays.deepToString(arg1) + " seek: " + arg2;
+        });
+
+        // Convert return value to a String
+        tester.setOutputToStringConverter(out -> out + "");
+
+        // Show the tester how to parse args and call the actual version of the method
+        tester.setMethodInvoker((obj, arg) -> {
+            // Parameter one is the grid
+            int[][] arg1 = (int[][]) arg[0];
+            // Parameter two is the number to seek
+            int arg2 = (Integer) arg[1];
+
+            // tester.getMethod() will return the actual method
+            return tester.getMethod().invoke(obj, arg1, arg2);
+        });
+
+        // Even grid to use for testing
+        int[][] evenArray = new int[][] { { 1, 2, 3, 4 }, { 5, 6, 7, 8 }, { 9, 1, 1, 3 } };
+        // Jagged grid to use for testing
+        int[][] jaggedArray = new int[][] { { 1, 2, 3, 4 }, { 5 }, { 9, 1, 1, 3, 5, 6 } };
+
+        // test cases
+
+        // Count the number of 1s in evenArray
+        tester.addArgs(new Object[] { evenArray, 1 });
+
+        // Count the number of 3s in evenArray
+        tester.addArgs(new Object[] { evenArray, 3 });
+
+        // Count the number of 12s in evenArray
+        tester.addArgs(new Object[] { evenArray, 12 });
+
+        // Count the number of 5s in jaggedArray
+        tester.addArgs(new Object[] { jaggedArray, 5 });
+
+        // Count the number of 4s in jaggedArray
+        tester.addArgs(new Object[] { jaggedArray, 4 });
+
+        tester.runTests();
+    }
+
+    public static int approved(Object[] args) {
+
+        // Get parameters out of Object[]
+        int[][] grid = (int[][]) args[0];
+
+        // Must cast as Integer because you can't cast an Object to an int
+        int seek = (Integer) args[1];
+
+        // Logic for accomplishing challenge
+        int count = 0;
+
+        for (int i = 0; i < grid.length; i++) {
+            for (int j = 0; j < grid[i].length; j++) {
+                if (grid[i][j] == seek) {
+                    count++;
+                }
+            }
+        }
+
+        return count;
+    }
+}
+```
+
+### Testing our new challenge
+
+1.  Create a new file in the same folder as the challenge tester that contains sample Student code. It will be called Test.java. Put into Test.java some sample code that a Student might write to try and solve the challenge.
+
+    Possible Student Code:
+
+```Java
+public class Test {
+    public int findNumInGrid(int[][] grid, int seek) {
+        int count = 0;
+
+        for (int i = 0; i < grid.length; i++) {
+            for (int j = 0; j < grid[i].length; j++) {
+                if (grid[i][j] == seek) {
+                    count++;
+                }
+            }
+        }
+
+        return count;
+    }
+}
+```
+
+**Don't commit any files that are being used solely for testing!**
+
+1.  Open GridFinder folder and run the below commands and see if the output is as expected (It should be json detailing the results of the test case)
+
+```
+javac -cp .:../util:../shared *.java
+java -cp .:../util:../shared GridFinderTest
+```
+
+Note that the output will look a little strange. It should be a json array.
 
 # Detailed Documentation on important classes and concepts
 

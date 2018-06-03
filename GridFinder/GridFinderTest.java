@@ -29,7 +29,7 @@ public class GridFinderTest {
             // Parameter two is the number to seek
             int arg2 = (Integer) arg[1];
 
-            return "grid: " + Arrays.deepToString(arg1) + " seek: " + arg2;
+            return "grid: " + Arrays.deepToString(arg1) + "\tseek: " + arg2;
         });
 
         // Convert return value to a String

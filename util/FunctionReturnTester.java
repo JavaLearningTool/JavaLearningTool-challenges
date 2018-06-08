@@ -28,19 +28,7 @@ public class FunctionReturnTester<O> extends MethodTester<O> {
     public FunctionReturnTester(Function<Object[], O> expectedFunction, String className, String methodName,
             Class<?> returnType, Class<?>... paramTypes) {
         super(className, methodName, MODIFIERS, returnType, paramTypes);
-
-        if (!failedToForm) {
-
-            this.expectedFunction = expectedFunction;
-            if (TestUtils.methodHasReturnType(method, Void.TYPE)) {
-                setSingleMessageResult("Method not found.",
-                        String.format("Method expected: %s(%s) with return type: %s.", methodName,
-                                Arrays.toString(paramTypes), returnType.toString()),
-                        false);
-                failedToForm = true;
-            }
-
-        }
+        this.expectedFunction = expectedFunction;
     }
 
     public void setMethodInvoker(ActualMethodInvoker<Object> methodInvoker) {
@@ -77,7 +65,16 @@ public class FunctionReturnTester<O> extends MethodTester<O> {
             results.add(null);
             long startTime = System.currentTimeMillis();
 
-            O expectedOut = expectedFunction.apply(args.get(i));
+            // Call expected function capture return value or Throwable
+            Throwable ex = null;
+            O out = null;
+            try {
+                out = expectedFunction.apply(args.get(i));
+            } catch (Throwable t) {
+                ex = t;
+            }
+            final Throwable expectedException = ex;
+            final O expectedOut = out;
 
             // Must be final to be accessed from inner class
             final String input = inToString.apply(args.get(i));
@@ -119,7 +116,28 @@ public class FunctionReturnTester<O> extends MethodTester<O> {
                     ComparativeTestResult result;
                     String consoleOut = getStandardOut();
 
-                    if (exception != null) {
+                    if (expectedException != null) { // We expect the actual method to throw something
+
+                        String expectedExceptionDescription = getExceptionMessageString(expectedException);
+                        String actualExceptionDescription = getExceptionMessageString(exception);
+
+                        boolean passed = true;
+
+                        // if actual exception is null or the exceptions classes aren't equal or
+                        // (expected exception's message isn't an empty String and the messages aren't
+                        // equal) then you didn't pass
+                        if (exception == null || !expectedException.getClass().equals(exception.getClass())
+                                || (!expectedException.getMessage().equals("")
+                                        && !expectedException.getMessage().equals(exception.getMessage()))) {
+
+                            passed = false;
+                        }
+
+                        result = new ComparativeTestResult(input, expectedExceptionDescription,
+                                actualExceptionDescription, passed, System.currentTimeMillis() - startTime, false,
+                                consoleOut);
+
+                    } else if (exception != null) { // We didn't expect the actual method to throw something but it did
 
                         // Get the exceptions Stack Trace as a String
                         StringWriter sw = new StringWriter();
@@ -129,7 +147,7 @@ public class FunctionReturnTester<O> extends MethodTester<O> {
 
                         result = new ComparativeTestResult(input, outToString.apply(expectedOut), stackTrace,
                                 System.currentTimeMillis() - startTime, consoleOut);
-                    } else {
+                    } else { // Nothing thrown
                         // Use equalityTester if available to test if actual equals expected
                         // otherwise use .equals()
                         boolean passed = false;
@@ -170,6 +188,28 @@ public class FunctionReturnTester<O> extends MethodTester<O> {
         }
 
         resultHandler.accept(results);
+    }
+
+    /**
+     * Return a message based on the Throwable for use in TestResults
+     * 
+     * @param exception the Throwable to use when making the message
+     * @return a String to use in TestResults
+     */
+    private String getExceptionMessageString(Throwable exception) {
+        // Exception is null
+        if (exception == null) {
+            return "Throws nothing.";
+        }
+
+        // Exception has a message that isn't just an empty String
+        if (!exception.getMessage().equals("")) {
+            return String.format("Throws %s with message: \"%s\".", exception.getClass().getSimpleName(),
+                    exception.getMessage());
+        }
+
+        // Exception message just an empty String
+        return String.format("Throws %s.", exception.getClass().getSimpleName());
     }
 
 }

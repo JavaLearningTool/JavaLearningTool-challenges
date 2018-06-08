@@ -275,7 +275,7 @@ public class TestUtils {
         return method.isDefault();
     }
 
-    public static boolean methodThrowsExceptions(Method method, Exception[] exceptions) {
+    public static boolean methodThrowsExceptions(Method method, Class<? extends Throwable>... exceptions) {
         return Arrays.equals(method.getExceptionTypes(), exceptions);
     }
 

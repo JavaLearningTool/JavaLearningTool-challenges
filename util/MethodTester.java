@@ -1,3 +1,4 @@
+import java.util.Arrays;
 import java.util.function.BiPredicate;
 import java.lang.reflect.Modifier;
 import java.lang.reflect.Method;
@@ -65,6 +66,39 @@ public abstract class MethodTester<O> extends Tester {
         constructor = TestUtils.hasAccessibleConstructor(cls, new Class<?>[] {});
         if (constructor == null) {
             setSingleMessageResult("Constructor not found.", "No args constructor not found.", false);
+            failedToForm = true;
+        }
+    }
+
+    /**
+     * Specifies what exceptions a method should throws.
+     * 
+     * @param exceptionTypes The types of the exceptions that the throws clause
+     *                       should include. If you don't provide any types then the
+     *                       method should not have a throws clause.
+     */
+    public void shouldThrow(Class<? extends Throwable>... exceptionTypes) {
+        if (failedToForm) {
+            return;
+        }
+
+        if (!TestUtils.methodThrowsExceptions(method, exceptionTypes)) {
+
+            if (exceptionTypes.length == 0) {
+                setSingleMessageResult("Method throws clause.", "Method header shouldn't have a throws clause.", false);
+            } else {
+
+                String arrString = "";
+                for (int i = 0; i < exceptionTypes.length; i++) {
+                    arrString += exceptionTypes[i].getSimpleName();
+                    if (i < exceptionTypes.length - 1) {
+                        arrString += ", ";
+                    }
+                }
+
+                setSingleMessageResult("Method throws clause.", "Method should throw " + arrString + ".", false);
+            }
+
             failedToForm = true;
         }
     }

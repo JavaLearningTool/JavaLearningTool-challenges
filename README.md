@@ -558,7 +558,7 @@ public class GridFinderTest {
     }
     ```
 
-9.  Add test cases to the tester by calling addArgs. The input to addArgs should be an array of Objects which are the parameters to the method.
+9 .  Add test cases to the tester by calling addArgs. The input to addArgs should be an array of Objects which are the parameters to the method.
 
     First we're gonna make some grids that we can reuse as arguments them we'll add the test cases.
 

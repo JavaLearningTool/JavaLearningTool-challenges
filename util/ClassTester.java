@@ -143,7 +143,7 @@ public class ClassTester extends Tester {
         Field[] fields = expected.getDeclaredFields();
         Field[] actualFields = actual.getDeclaredFields();
         List<Field> parentFields = TestUtils.getAllSuperFields(expected);
-        List<Field> actualAllFields = TestUtils.getAllSuperFields(expected);
+        List<Field> actualAllFields = TestUtils.getAllSuperFields(actual);
         actualAllFields.addAll(Arrays.asList(actualFields));
 
         // Extract all methods annotated as being a TestedMember from expected class
@@ -177,7 +177,7 @@ public class ClassTester extends Tester {
 
                     // Check to make sure we found the actual method
                     if (actualMethod == null) {
-                        setSingleMessageResult("Method not found.",
+                        setSingleMessageResult(className + ".java: Method not found.",
                                 String.format("Method expected: %s.", TestUtils.methodToString(m.getModifiers(),
                                         m.getReturnType(), m.getName(), m.getParameterTypes())),
                                 false);
@@ -218,7 +218,7 @@ public class ClassTester extends Tester {
 
                     // Check to make sure we found the actual constructor
                     if (actualConstructor == null) {
-                        setSingleMessageResult("Constructor not found.",
+                        setSingleMessageResult(className + ".java: Constructor not found.",
                                 String.format("Constructor expected: %s.", TestUtils.constructorToString(c)), false);
                         failedToForm = true;
                     } else {
@@ -255,8 +255,11 @@ public class ClassTester extends Tester {
 
                     // Check to make sure we found the actual field
                     if (actualField == null) {
-                        setSingleMessageResult("Field not found.", String.format("Field expected: %s.",
-                                TestUtils.fieldToString(f.getModifiers(), f.getType(), f.getName())), false);
+                        String fieldClassName = f.getDeclaringClass().getSimpleName();
+                        setSingleMessageResult(fieldClassName + ".java: Field not found.",
+                                String.format("Field expected: %s.",
+                                        TestUtils.fieldToString(f.getModifiers(), f.getType(), f.getName())),
+                                false);
                         failedToForm = true;
                     } else {
                         // Add the field to the fieldMap
@@ -307,12 +310,14 @@ public class ClassTester extends Tester {
         if (actualFields.length > limit) {
             failedToForm = true;
             if (limit == 0) {
-                setSingleMessageResult("Too many fields.", "You may not use any fields in this challenge.", false);
+                setSingleMessageResult(className + ".java: Too many fields.",
+                        "You may not use any fields in this challenge.", false);
             } else if (limit == 1) {
-                setSingleMessageResult("Too many fields.", "You may only use 1 field in this challenge.", false);
+                setSingleMessageResult(className + ".java: Too many fields.",
+                        "You may only use 1 field in this challenge.", false);
             } else {
-                setSingleMessageResult("Too many fields.", "You may only use " + limit + " fields in this challenge.",
-                        false);
+                setSingleMessageResult(className + ".java: Too many fields.",
+                        "You may only use " + limit + " fields in this challenge.", false);
             }
 
         }
@@ -440,6 +445,23 @@ public class ClassTester extends Tester {
                     "Failed when trying to convert class's fields to Strings.", false);
             return null;
         }
+    }
+
+    public Object[] makeInstance(String constructorName, Object... args) {
+        try {
+            TestableConstructor constructors = constructorMap.get(constructorName);
+            Object expected = constructors.constructor.newInstance(args);
+            Object actual = constructors.actualConstructor.newInstance(args);
+
+            return new Object[] { expected, actual };
+        } catch (InstantiationException e) {
+            throw new IllegalArgumentException("Failed making instance of class with provided args!");
+        } catch (IllegalAccessException e) {
+            throw new IllegalArgumentException("Failed making instance of class with provided args!");
+        } catch (InvocationTargetException e) {
+            throw new IllegalArgumentException("Failed making instance of class with provided args!");
+        }
+
     }
 
     /**

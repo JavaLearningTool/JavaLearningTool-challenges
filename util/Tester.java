@@ -15,7 +15,7 @@ public abstract class Tester {
 
     protected ByteArrayOutputStream baos;
     protected PrintStream ps;
-    protected PrintStream oldOut;
+    protected static PrintStream oldOut;
 
     public Tester() {
         captureStandardOut();
@@ -67,6 +67,10 @@ public abstract class Tester {
 
     public List<TestResult> getResults() {
         return results;
+    }
+
+    public void addResults(List<TestResult> results) {
+        this.results.addAll(results);
     }
 
     public void setSingleMessageResult(String label, String message, boolean passed) {

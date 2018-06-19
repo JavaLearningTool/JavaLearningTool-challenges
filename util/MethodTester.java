@@ -31,19 +31,19 @@ public abstract class MethodTester<O> extends Tester {
 
             method = TestUtils.accessibleDeclaredMethodExists(cls, methodName, paramTypes);
             if (method == null) {
-                setSingleMessageResult("Method not found.", String.format("Method expected: %s.",
+                setSingleMessageResult(className + ".java: Method not found.", String.format("Method expected: %s.",
                         TestUtils.methodToString(modifier, returnType, methodName, paramTypes)), false);
                 failedToForm = true;
             } else if (!TestUtils.methodHasReturnType(method, returnType)) {
-                setSingleMessageResult("Method not found.", String.format("Method expected: %s.",
+                setSingleMessageResult(className + ".java: Method not found.", String.format("Method expected: %s.",
                         TestUtils.methodToString(modifier, returnType, methodName, paramTypes)), false);
                 failedToForm = true;
             } else if (TestUtils.methodIsAbstract(method)) {
-                setSingleMessageResult("Method is abstract.", String.format("Method expected: %s.",
+                setSingleMessageResult(className + ".java: Method is abstract.", String.format("Method expected: %s.",
                         TestUtils.methodToString(modifier, returnType, methodName, paramTypes)), false);
                 failedToForm = true;
             } else if (!TestUtils.methodHasModifiers(method, modifier)) {
-                setSingleMessageResult("Method not found.", String.format("Method expected: %s.",
+                setSingleMessageResult(className + ".java: Method not found.", String.format("Method expected: %s.",
                         TestUtils.methodToString(modifier, returnType, methodName, paramTypes)), false);
                 failedToForm = true;
             } else {
@@ -65,7 +65,8 @@ public abstract class MethodTester<O> extends Tester {
 
         constructor = TestUtils.hasAccessibleConstructor(cls, new Class<?>[] {});
         if (constructor == null) {
-            setSingleMessageResult("Constructor not found.", "No args constructor not found.", false);
+            setSingleMessageResult(className + ".java: Constructor not found.", "No args constructor not found.",
+                    false);
             failedToForm = true;
         }
     }
@@ -85,7 +86,8 @@ public abstract class MethodTester<O> extends Tester {
         if (!TestUtils.methodThrowsExceptions(method, exceptionTypes)) {
 
             if (exceptionTypes.length == 0) {
-                setSingleMessageResult("Method throws clause.", "Method header shouldn't have a throws clause.", false);
+                setSingleMessageResult(className + ".java: Method throws clause.",
+                        "Method header shouldn't have a throws clause.", false);
             } else {
 
                 String arrString = "";
@@ -96,7 +98,8 @@ public abstract class MethodTester<O> extends Tester {
                     }
                 }
 
-                setSingleMessageResult("Method throws clause.", "Method should throw " + arrString + ".", false);
+                setSingleMessageResult(className + ".java: Method throws clause.",
+                        "Method should throw " + arrString + ".", false);
             }
 
             failedToForm = true;

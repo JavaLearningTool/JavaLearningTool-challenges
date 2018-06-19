@@ -46,8 +46,8 @@ public class CommandLineStandardOutTester extends MethodTester<String> {
 
 			// Test to see if the student's method named main is void
 			if (!TestUtils.methodHasReturnType(method, Void.TYPE)) {
-				setSingleMessageResult("Method not found.", "Method expected: main(String[]) with return type: void.",
-						false);
+				setSingleMessageResult(className + ".java: Method not found.",
+						"Method expected: main(String[]) with return type: void.", false);
 				failedToForm = true;
 			} else {
 				this.expectedConsumer = expectedConsumer;

@@ -44,18 +44,34 @@ public class ProductInventoryClassBuildingTest extends ClassTester {
     private void addPurchaseTest(Product[] purchaseProd, Product[] sellProd, int[] purchaseAmount, int[] sellAmount) {
         startGroup("Testing purchaseProduct and sellProduct");
 
+        Map<Product, Integer> createdMap = new HashMap<Product, Integer>();
+
         addFormatConstructor("constructor", "ProductInventory %s = new ProductInventory();", "pI");
         for (int i = 0; i < purchaseProd.length; i++) {
             Product prod = purchaseProd[i];
-            addAction("Product p%d = new Product(\"%s\", %.2f);", i, prod.getName(), prod.getPrice());
-            addChunk("purchaseProduct", "pI.purchaseProduct(p" + i + ", " + purchaseAmount[i] + ");", "pI", prod,
+            int which = i;
+            if (!createdMap.containsKey(prod)) {
+                addAction("Product p%d = new Product(\"%s\", %.2f);", i, prod.getName(), prod.getPrice());
+                createdMap.put(prod, i);
+            } else {
+                which = createdMap.get(prod);
+            }
+
+            addChunk("purchaseProduct", "pI.purchaseProduct(p" + which + ", " + purchaseAmount[i] + ");", "pI", prod,
                     purchaseAmount[i]);
             addFieldTest("pI", "inventory");
         }
 
         for (int i = 0; i < sellProd.length; i++) {
             Product prod = sellProd[i];
-            addChunk("sellProduct", "pI.sellProduct(p" + i + ", " + purchaseAmount[i] + ");", "pI", prod,
+            int which = i;
+            if (!createdMap.containsKey(prod)) {
+                addAction("Product p%d = new Product(\"%s\", %.2f);", i, prod.getName(), prod.getPrice());
+                createdMap.put(prod, i);
+            } else {
+                which = createdMap.get(prod);
+            }
+            addChunk("sellProduct", "pI.sellProduct(p" + which + ", " + sellAmount[i] + ");", "pI", prod,
                     sellAmount[i]);
             addFieldTest("pI", "inventory");
         }

@@ -247,7 +247,7 @@ public class ClassTester extends Tester {
                     // Find the matching field from the actual class or super class of actual class
                     Field actualField = null;
                     for (Field field : actualAllFields) {
-                        if (TestUtils.fieldEquals(field, f)) {
+                        if (TestUtils.fieldEquals(f, field)) {
                             actualField = field;
                             break;
                         }
@@ -258,7 +258,7 @@ public class ClassTester extends Tester {
                         String fieldClassName = f.getDeclaringClass().getSimpleName();
                         setSingleMessageResult(fieldClassName + ".java: Field not found.",
                                 String.format("Field expected: %s.",
-                                        TestUtils.fieldToString(f.getModifiers(), f.getType(), f.getName())),
+                                        TestUtils.fieldToString(f.getModifiers(), f.getGenericType(), f.getName())),
                                 false);
                         failedToForm = true;
                     } else {

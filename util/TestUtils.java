@@ -2,6 +2,8 @@ import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
+import java.lang.reflect.ParameterizedType;
+import java.lang.reflect.Type;
 import java.util.List;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -355,6 +357,12 @@ public class TestUtils {
         return field;
     }
 
+    /**
+     * Returns if fields are equal
+     * 
+     * @param f1 a field to test for equality
+     * @param f2 another field to test for equality
+     */
     public static boolean fieldEquals(Field f1, Field f2) {
 
         if (f1 == null || f2 == null) {
@@ -366,8 +374,8 @@ public class TestUtils {
         }
 
         /*
-         * If the fields aren't from the same class. This has a potential to go wrong if
-         * the tested class has the same name as another class
+         * Test if the fields aren't from the same class. This has a potential to go
+         * wrong if the tested class has the same name as another class
          */
         if (!f1.getDeclaringClass().getSimpleName().equals(f2.getDeclaringClass().getSimpleName())) {
             return false;
@@ -377,15 +385,109 @@ public class TestUtils {
             return false;
         }
 
-        if (!f1.getType().equals(f2.getType())) {
+        if (!typeEqual(f1.getGenericType(), f2.getGenericType())) {
             return false;
         }
 
         return true;
     }
 
-    public static String fieldToString(int modifier, Class<?> type, String name) {
-        return String.format("%s %s %s", Modifier.toString(modifier), type.getSimpleName(), name);
+    /**
+     * Returns if types are equal. Pass in generic types if applicable
+     * 
+     * @param t1 a type to test for equality
+     * @param t2 another type to test for equality
+     */
+    public static boolean typeEqual(Type t1, Type t2) {
+
+        // Possible early exit
+        if (!t1.equals(t2)) {
+            return false;
+        }
+
+        if ((t1 instanceof ParameterizedType && !(t2 instanceof ParameterizedType))
+                || (t2 instanceof ParameterizedType && !(t1 instanceof ParameterizedType))) {
+            return false;
+        }
+
+        if (t1 instanceof ParameterizedType) {
+            ParameterizedType paramType1 = (ParameterizedType) t1;
+            Type[] params1 = paramType1.getActualTypeArguments();
+
+            ParameterizedType paramType2 = (ParameterizedType) t2;
+            Type[] params2 = paramType2.getActualTypeArguments();
+
+            if (params1.length != params2.length) {
+                return false;
+            }
+
+            for (int i = 0; i < params1.length; i++) {
+                if (!typeEqual(params1[i], params2[i])) {
+                    return false;
+                }
+            }
+        }
+
+        // Everything was equal
+        return true;
+    }
+
+    /**
+     * Convert the field to a String
+     * 
+     * @param modifier the fields modifiers
+     * @param type     the type of the field (Use the generic type if applicable)
+     * @param name     The name of the field
+     * @return String version of field
+     */
+    public static String fieldToString(int modifier, Type type, String name) {
+        return String.format("%s %s %s", Modifier.toString(modifier), typeToString(type), name);
+    }
+
+    /**
+     * Converts a Type to a String. Handles the case when the type is generic
+     * 
+     * @param type the type to convert to a String
+     * @return String version of type
+     */
+    public static String typeToString(Type type) {
+
+        String parameterizedTypes = "";
+
+        if (type instanceof ParameterizedType) {
+            parameterizedTypes += "<";
+            ParameterizedType paramType = (ParameterizedType) type;
+
+            Type[] params = paramType.getActualTypeArguments();
+            for (int i = 0; i < params.length; i++) {
+                if (params[i] instanceof Class<?>) {
+                    parameterizedTypes += typeToString(params[i]);
+                    if (i < params.length - 1) {
+                        parameterizedTypes += ", ";
+                    }
+                }
+            }
+            parameterizedTypes += ">";
+
+            if (type instanceof Class<?>) {
+                return ((Class) type).getSimpleName() + parameterizedTypes;
+            } else {
+                try {
+                    Class cls = Class.forName(paramType.getRawType().getTypeName());
+                    return cls.getSimpleName() + parameterizedTypes;
+                } catch (ClassNotFoundException e) {
+                    return type.getTypeName();
+                }
+            }
+
+        } else {
+            try {
+                Class cls = Class.forName(type.getTypeName());
+                return cls.getSimpleName();
+            } catch (ClassNotFoundException e) {
+                return type.getTypeName();
+            }
+        }
     }
 
     public static boolean fieldHasModifiers(Field method, int mods) {

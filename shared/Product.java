@@ -75,7 +75,7 @@ public class Product {
      * @return the String representation of this Product
      */
     public String toString() {
-        return String.format("{name: %s, price: %.2f, id: %d}", name, price, id);
+        return String.format("{Product name: %s, price: %.2f, id: %d}", name, price, id);
     }
 
     @Override

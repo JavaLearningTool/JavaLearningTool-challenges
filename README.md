@@ -2,45 +2,45 @@ JavaLearningTool-challenges
 
 # Table of contents
 
-*   [Table of contents](#table-of-contents)
-*   [Getting Started](#getting-started)
-    *   [File Structure](#file-structure)
-    *   [Creating your first challenge -- HelloJava](#creating-your-first-challenge----hellojava)
-        *   [Coding](#coding)
-        *   [Testing our new challenge](#testing-our-new-challenge)
-        *   [Adding More](#adding-more)
-    *   [Creating a FunctionReturnTester -- GridFinder](#creating-a-functionreturntester----gridfinder)
-        *   [Coding](#coding)
-        *   [Testing our new challenge](#testing-our-new-challenge)
-*   [Detailed Documentation on important classes and concepts](#detailed-documentation-on-important-classes-and-concepts)
-    *   [Tester](#tester)
-        *   [Tester output](#tester-output)
-        *   [Standard Out](#standard-out)
-        *   [Tester Formation](#tester-formation)
-        *   [Test Results](#test-results)
-        *   [Result Handler](#result-handler)
-    *   [MethodTester](#methodtester)
-        *   [Equality Tester](#equality-tester)
-            *   [Loose Double Equality](#loose-double-equality)
-            *   [Loose String Equality](#loose-string-equality)
-    *   [CommandLineStandardOutTester](#commandlinestandardouttester)
-        *   [Creating CommandLineStandardOutTesters](#creating-commandlinestandardouttesters)
-        *   [Common Uses](#common-uses)
-        *   [Example](#example)
-    *   [FunctionReturnTester](#functionreturntester)
-        *   [To String Converters](#to-string-converters)
-            *   [inputToStringConverter](#inputtostringconverter)
-            *   [outputToStringConverter](#outputtostringconverter)
-        *   [methodInvoker](#methodinvoker)
-        *   [Creating FunctionReturnTesters](#creating-functionreturntesters)
-        *   [Example](#example)
-    *   [ClassTester](#classtester)
-        *   [EqualityTester](#equalitytester)
-        *   [Stringifier](#stringifier)
-        *   [TestedMember](#testedmember)
-        *   [Creating ClassTesters](#creating-classtesters)
-        *   [Example](#example)
-    *   [Vocabulary](#vocabulary)
+- [Table of contents](#table-of-contents)
+- [Getting Started](#getting-started)
+  - [File Structure](#file-structure)
+  - [Creating your first challenge -- HelloJava](#creating-your-first-challenge----hellojava)
+    - [Coding](#coding)
+    - [Testing our new challenge](#testing-our-new-challenge)
+    - [Adding More](#adding-more)
+  - [Creating a FunctionReturnTester -- GridFinder](#creating-a-functionreturntester----gridfinder)
+    - [Coding](#coding-1)
+    - [Testing our new challenge](#testing-our-new-challenge-1)
+- [Detailed Documentation on important classes and concepts](#detailed-documentation-on-important-classes-and-concepts)
+  - [Tester](#tester)
+    - [Tester output](#tester-output)
+    - [Standard Out](#standard-out)
+    - [Tester Formation](#tester-formation)
+    - [Test Results](#test-results)
+    - [Result Handler](#result-handler)
+  - [MethodTester](#methodtester)
+    - [Equality Tester](#equality-tester)
+      - [Loose Double Equality](#loose-double-equality)
+      - [Loose String Equality](#loose-string-equality)
+  - [CommandLineStandardOutTester](#commandlinestandardouttester)
+    - [Creating CommandLineStandardOutTesters](#creating-commandlinestandardouttesters)
+    - [Common Uses](#common-uses)
+    - [Example](#example)
+  - [FunctionReturnTester](#functionreturntester)
+    - [To String Converters](#to-string-converters)
+      - [inputToStringConverter](#inputtostringconverter)
+      - [outputToStringConverter](#outputtostringconverter)
+    - [methodInvoker](#methodinvoker)
+    - [Creating FunctionReturnTesters](#creating-functionreturntesters)
+    - [Example](#example-1)
+  - [ClassTester](#classtester)
+    - [EqualityTester](#equalitytester)
+    - [Stringifier](#stringifier)
+    - [TestedMember](#testedmember)
+    - [Creating ClassTesters](#creating-classtesters)
+    - [Example](#example-2)
+  - [Vocabulary](#vocabulary)
 
 # Getting Started
 
@@ -48,7 +48,7 @@ JavaLearningTool-challenges
 
 ```
 JavaLearningTool-challenges
-| util: folder with util classes like the different testers are stored in this folder
+| tester_lib: gradle library with util classes like the different testers are stored in this folder
 |
 | shared: folder with classes that are given to the Students to be used in the challenges are stored here
 |
@@ -187,8 +187,8 @@ public class HelloJavaTest {
 2.  Open HelloJava folder and run the below commands and see if the output is as expected (It should be json detailing the results of the test case)
 
 ```
-javac -cp .:../util:../shared *.java
-java -cp .:../util:../shared HelloJavaTest
+javac -cp .:../tester_lib/build/libs/tester_lib.jar:../shared *.java
+java -cp .:../tester_lib/build/libs/tester_lib.jar:../shared HelloJavaTest
 ```
 
 Note that the output will look a little strange. It should be a json array.
@@ -790,8 +790,8 @@ public class Test {
 1.  Open GridFinder folder and run the below commands and see if the output is as expected (It should be json detailing the results of the test case)
 
 ```
-javac -cp .:../util:../shared *.java
-java -cp .:../util:../shared GridFinderTest
+javac -cp .:../tester_lib/build/libs/tester_lib.jar:../shared *.java
+java -cp .:../tester_lib/build/libs/tester_lib.jar:../shared GridFinderTest
 ```
 
 Note that the output will look a little strange. It should be a json array.

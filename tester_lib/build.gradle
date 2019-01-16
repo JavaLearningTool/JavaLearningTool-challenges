@@ -9,21 +9,31 @@
 // Apply the java plugin to add support for Java
 apply plugin: 'java'
 
-// Apply the library plugin to add support for building an application
-apply plugin: 'java-library'
+// Build the project using shadow plugin to create a fat jar
+buildscript {
+    // Use jcenter to resolve dependencies
+    repositories {
+        jcenter()
+    }
+    dependencies {
+        // Shadow plugin used for creating fat jars
+        classpath 'com.github.jengelman.gradle.plugins:shadow:4.0.3'
+    }
+}
 
-// In this section you declare where to find the dependencies of your project
+// Use jcenter to resolve dependencies
 repositories {
-    // Use jcenter for resolving your dependencies.
-    // You can declare any Maven/Ivy/file repository here.
     jcenter()
 }
 
 dependencies {
-    
+    // Use javaparser as a dependency
     compile 'com.github.javaparser:javaparser-symbol-solver-core:3.10.0'
-
-    // Use JUnit test framework
-    testCompile 'junit:junit:4.12'
 }
+
+// Use shadow plugin for creating fat jars
+apply plugin: 'com.github.johnrengelman.shadow'
+
+// create the fat jar whenever build task us run
+tasks.build.dependsOn tasks.shadowJar
 

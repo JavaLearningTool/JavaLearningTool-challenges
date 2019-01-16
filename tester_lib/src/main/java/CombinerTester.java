@@ -1,11 +1,11 @@
 import java.util.List;
 import java.util.ArrayList;
 
-public class CombinerTester extends Tester {
-    List<Tester> testers = new ArrayList<Tester>();
+public class CombinerTester extends RunnableTester {
+    private List<RunnableTester> testers = new ArrayList<RunnableTester>();
 
-    public void addTesters(Tester... testers) {
-        for (Tester tester : testers) {
+    public void addTesters(RunnableTester... testers) {
+        for (RunnableTester tester : testers) {
             tester.setResultHandler(results -> {
                 this.results.addAll(results);
             });
@@ -14,7 +14,7 @@ public class CombinerTester extends Tester {
     }
 
     public void runTests(long time) {
-        for (Tester tester : testers) {
+        for (RunnableTester tester : testers) {
             tester.runTests(time);
         }
 
@@ -24,7 +24,7 @@ public class CombinerTester extends Tester {
     @Override
     public boolean didForm() {
         boolean formed = true;
-        for (Tester tester : testers) {
+        for (RunnableTester tester : testers) {
             if (!tester.didForm()) {
                 formed = false;
                 results.addAll(tester.results);

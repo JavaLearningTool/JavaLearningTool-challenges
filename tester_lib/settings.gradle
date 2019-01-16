@@ -15,4 +15,4 @@ include 'api'
 include 'services:webservice'
 */
 
-rootProject.name = 'Nova Java Testing Library'
+rootProject.name = 'tester_lib'

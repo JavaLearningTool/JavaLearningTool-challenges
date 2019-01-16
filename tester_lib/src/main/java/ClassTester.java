@@ -37,7 +37,7 @@ import java.util.stream.IntStream;
  * This class contains a Function Interface, Invoker, which exists as an
  * abstraction for a TestCase or a chunk of a TestCase
  */
-public class ClassTester extends Tester {
+public class ClassTester extends RunnableTester {
 
     // Singleton
     protected static ClassTester tester;

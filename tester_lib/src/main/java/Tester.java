@@ -1,64 +1,28 @@
 
 import java.util.function.Consumer;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.io.ByteArrayOutputStream;
 import java.io.PrintStream;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public abstract class Tester {
+
+    protected ByteArrayOutputStream baos;
+    protected PrintStream ps;
+    protected static PrintStream oldOut;
 
     protected Consumer<List<TestResult>> resultHandler;
     protected List<TestResult> results = new ArrayList<TestResult>();
 
     protected boolean failedToForm;
 
-    protected ByteArrayOutputStream baos;
-    protected PrintStream ps;
-    protected static PrintStream oldOut;
-
     public Tester() {
         captureStandardOut();
         resultHandler = (results) -> {
             printResults();
         };
-    }
-
-    private void captureStandardOut() {
-        baos = new ByteArrayOutputStream();
-        ps = new PrintStream(baos);
-
-        // Only grab oldOut from System.out once
-        if (oldOut == null) {
-            oldOut = System.out;
-        }
-
-        System.setOut(ps);
-    }
-
-    protected void resetStandardOut() {
-        // Ensure that we are capturing stdout
-        System.setOut(ps);
-
-        // Flush out stream so that all output from stdout is ready
-        ps.flush();
-
-        // Clears the output stream
-        baos.reset();
-    }
-
-    protected String getStandardOut() {
-        // Flush out stream so that all output from stdout is ready
-        ps.flush();
-        // Get output from stdout
-        String out = baos.toString();
-        // Clears the output stream
-        baos.reset();
-        return out;
-    }
-
-    protected void clearStandardOut() {
-        baos.reset();
     }
 
     public boolean didForm() {
@@ -99,5 +63,40 @@ public abstract class Tester {
         oldOut.println(toJsonString());
     }
 
-    public abstract void runTests(long limit);
+    private void captureStandardOut() {
+        baos = new ByteArrayOutputStream();
+        ps = new PrintStream(baos);
+
+        // Only grab oldOut from System.out once
+        if (oldOut == null) {
+            oldOut = System.out;
+        }
+
+        System.setOut(ps);
+    }
+
+    protected void resetStandardOut() {
+        // Ensure that we are capturing stdout
+        System.setOut(ps);
+
+        // Flush out stream so that all output from stdout is ready
+        ps.flush();
+
+        // Clears the output stream
+        baos.reset();
+    }
+
+    protected String getStandardOut() {
+        // Flush out stream so that all output from stdout is ready
+        ps.flush();
+        // Get output from stdout
+        String out = baos.toString();
+        // Clears the output stream
+        baos.reset();
+        return out;
+    }
+
+    protected void clearStandardOut() {
+        baos.reset();
+    }
 }

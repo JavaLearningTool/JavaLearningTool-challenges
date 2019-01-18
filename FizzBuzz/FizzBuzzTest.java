@@ -23,7 +23,6 @@ public class FizzBuzzTest {
     }
 
     public static void approved(String[] args) {
-        // In this test Students should print out Hello {args[0]}
         int num = Integer.parseInt(args[0]);
         if (num % 3 == 0 && num % 5 == 0) {
             System.out.println("FizzBuzz");

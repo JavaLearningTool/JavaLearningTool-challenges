@@ -99,4 +99,15 @@ public abstract class Tester {
     protected void clearStandardOut() {
         baos.reset();
     }
+
+    public boolean passed() {
+        boolean passed = true;
+        for(TestResult result: results) {
+            if (!result.passed) {
+                passed = false;
+            }
+        }
+
+        return passed;
+    }
 }

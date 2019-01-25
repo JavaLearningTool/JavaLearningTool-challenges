@@ -162,8 +162,8 @@ public class CommandLineStandardOutTester extends MethodTester<String> {
 							// Do nothing. We timed out
 							return;
 						} else {
-							// If an exception occurred in the tester
-							e.printStackTrace();
+							exception = new Exception("Something went very wrong.\n\t-Check that you aren't using any forbidden"
+								+ "classes like Scanner.\n\t-Check that you have not caused a StackOverflow with infinite recursion.\n");
 						}
 					} catch (Exception e) {
 						// If an exception occurred in the student's code

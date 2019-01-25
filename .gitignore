@@ -4,7 +4,9 @@
 .mtj.tmp/
 
 # Package Files #
-*.jar
+gradle-wrapper.jar
+tester_lib.jar
+# Don't remove tester_lib-all.jar!
 *.war
 *.ear
 

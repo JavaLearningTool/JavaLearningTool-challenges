@@ -157,7 +157,7 @@ public abstract class MethodTester<O> extends RunnableTester {
                 actual = actual.replaceAll("\\s+", "");
             }
 
-            return actual.matches(expected);
+            return actual.equals(expected);
         };
     }
 }

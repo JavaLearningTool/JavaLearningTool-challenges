@@ -1,5 +1,6 @@
 import java.util.function.BiFunction;
 import java.util.function.Function;
+import java.util.function.Supplier;
 import java.lang.reflect.Method;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -14,14 +15,23 @@ import java.lang.reflect.Modifier;
 import java.util.Arrays;
 import java.util.List;
 import java.util.ArrayList;
+import java.util.Map;
+import java.util.HashMap;
 
+/**
+ * Tests Methods by supplying input and looking at the output
+ * 
+ * Also tests side effects on parameters
+ * 
+ * @param O the return type of the method
+ */
 public class FunctionReturnTester<O> extends MethodTester<O> {
 
     private static final int MODIFIERS = Modifier.PUBLIC;
     protected Function<Object[], O> expectedFunction;
 
     protected ActualMethodInvoker<Object> methodInvoker;
-    protected List<Object[]> args = new ArrayList<Object[]>();
+    protected List<Supplier<Object>[]> args = new ArrayList<Supplier<Object>[]>();
     protected Function<Object[], String> inToString;
     protected Function<O, String> outToString;
 
@@ -35,8 +45,65 @@ public class FunctionReturnTester<O> extends MethodTester<O> {
         this.methodInvoker = methodInvoker;
     }
 
-    public void addArgs(Object... args) {
+    /**
+     * Adds a new test case with the given inputs
+     * 
+     * @param args var args Supplier objects that return the nth input to the method
+     * for this test case
+     */
+    public void addArgs(Supplier<Object>... args) {
         this.args.add(args);
+    }
+
+    /**
+     * Adds a new test case with the given number inputs. Use this if all inputs are primitive numbers
+     * 
+     * @param args var args primitive Numbers where the nth item is the nth input to the method
+     * for this test case
+     */
+    public void addArgs(Number... args) {
+        Supplier<Object>[] suppliers = new Supplier[args.length];
+        
+        for (int i = 0; i < suppliers.length; i++) {
+            Object arg = args[i];
+            suppliers[i] = () -> arg;
+        }
+
+        addArgs(suppliers);
+    }
+
+    /**
+     * Adds a new test case with the given boolean inputs. Use this if all inputs are booleans
+     * 
+     * @param args var args booleans where the nth item is the nth input to the method
+     * for this test case
+     */
+    public void addArgs(boolean... args) {
+        Supplier<Object>[] suppliers = new Supplier[args.length];
+        
+        for (int i = 0; i < suppliers.length; i++) {
+            Object arg = args[i];
+            suppliers[i] = () -> arg;
+        }
+
+        addArgs(suppliers);
+    }
+
+    /**
+     * Adds a new test case with the given char inputs. Use this if all inputs are chars
+     * 
+     * @param args var args chars where the nth item is the nth input to the method
+     * for this test case
+     */
+    public void addArgs(char... args) {
+        Supplier<Object>[] suppliers = new Supplier[args.length];
+        
+        for (int i = 0; i < suppliers.length; i++) {
+            Object arg = args[i];
+            suppliers[i] = () -> arg;
+        }
+
+        addArgs(suppliers);
     }
 
     public void setInputToStringConverter(Function<Object[], String> inToString) {
@@ -68,8 +135,18 @@ public class FunctionReturnTester<O> extends MethodTester<O> {
             // Call expected function capture return value or Throwable
             Throwable ex = null;
             O out = null;
+
+            // Get inputs
+            Supplier[] argsSupplier = args.get(i);
+            Object[] expectedIn = new Object[argsSupplier.length];
+            Object[] actualIn = new Object[argsSupplier.length];
+            for (int j = 0; j < expectedIn.length; j++) {
+                expectedIn[j] = argsSupplier[j].get();
+                actualIn[j] = argsSupplier[j].get();
+            }
+
             try {
-                out = expectedFunction.apply(args.get(i));
+                out = expectedFunction.apply(expectedIn);
             } catch (Throwable t) {
                 ex = t;
             }
@@ -77,7 +154,7 @@ public class FunctionReturnTester<O> extends MethodTester<O> {
             final O expectedOut = out;
 
             // Must be final to be accessed from inner class
-            final String input = inToString.apply(args.get(i));
+            final String input = inToString.apply(expectedIn);
             AtomicBoolean testFinished = new AtomicBoolean(false);
 
             Runnable testRunner = new Runnable() {
@@ -94,9 +171,7 @@ public class FunctionReturnTester<O> extends MethodTester<O> {
                             actualObject = constructor.newInstance();
                         }
 
-                        Object[] testArgs = args.get(numTest.get());
-
-                        actualOut = (O) methodInvoker.apply(actualObject, testArgs);
+                        actualOut = (O) methodInvoker.apply(actualObject, actualIn);
 
                     } catch (IllegalAccessException e) {
                         e.printStackTrace();
@@ -113,7 +188,7 @@ public class FunctionReturnTester<O> extends MethodTester<O> {
                         exception = e;
                     }
 
-                    ComparativeTestResult result;
+                    TestResult result = null;
                     String consoleOut = getStandardOut();
 
                     if (expectedException != null) { // We expect the actual method to throw something
@@ -151,15 +226,46 @@ public class FunctionReturnTester<O> extends MethodTester<O> {
                         // Use equalityTester if available to test if actual equals expected
                         // otherwise use .equals()
                         boolean passed = false;
-                        if (equalityTester != null) {
+                        if (expectedOut == null || actualOut == null) { // Null check
+                            passed = actualOut == expectedOut; // Pass only if both are null
+                        } else if (equalityTester != null) { // Use equality tester if we have it
                             passed = equalityTester.test(expectedOut, actualOut);
-                        } else {
-                            passed = expectedOut.equals(actualOut);
+                        } else { // Use smart equals
+                            passed = TestUtils.smartEquals(expectedOut, actualOut);
                         }
 
-                        result = new ComparativeTestResult(input, outToString.apply(expectedOut),
-                                outToString.apply(actualOut), passed, System.currentTimeMillis() - startTime, false,
+                        String expectedString = expectedOut == null ? "null" : outToString.apply(expectedOut);
+                        String actualString = actualOut == null ? "null" : outToString.apply(actualOut);
+
+                        if (!passed) { // If actual is not equal to expected
+                            result = new ComparativeTestResult(input, expectedString,
+                                actualString, false, System.currentTimeMillis() - startTime, false,
                                 consoleOut);
+                        } else {
+                            // Check possible side effects
+                            for (int j = 0; j < expectedIn.length; j++) {
+                                Object expectedSideEffect = expectedIn[j];
+                                Object actualSideEffect = actualIn[j];
+
+                                // If side effect wasn't same in actual and expected
+                                if (!TestUtils.smartEquals(expectedSideEffect, actualSideEffect)) {
+                                    passed = false;
+                                    //String expected, String actual, String label, String message, boolean passed, long time, String consoleOut
+                                    result = new ComparativeMessageTestResult(TestUtils.smartToString(expectedSideEffect), TestUtils.smartToString(actualSideEffect),
+                                        "Parameter " + j + " modified in unexpected way.", null, false, System.currentTimeMillis() - startTime,
+                                        consoleOut);
+                                    break;
+                                }
+                            }
+
+                            // All side effects were properly applied
+                            if (passed) {
+                                result = new ComparativeTestResult(input, expectedString,
+                                    actualString, true, System.currentTimeMillis() - startTime, false,
+                                    consoleOut);
+                            }
+                        }
+                        
                     }
 
                     results.set(numTest.get(), result);

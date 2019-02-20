@@ -17,9 +17,9 @@ public class RaceFinishTest {
         MethodTester.useLooseStringEquality(tester);
 
         // test cases
-        tester.addArgs((Object) new String[] { "Chad", "Mike", "Brad", "Carl", "Tim", "Steve" });
-        tester.addArgs((Object) new String[] { "Megan", "Stacy", "Stacy's Mom" });
-        tester.addArgs((Object) new String[] { "Steve" });
+        tester.addArgs(() -> new String[] { "Chad", "Mike", "Brad", "Carl", "Tim", "Steve" });
+        tester.addArgs(() -> new String[] { "Megan", "Stacy", "Stacy's Mom" });
+        tester.addArgs(() -> new String[] { "Steve" });
 
         tester.setMethodInvoker((obj, arg) -> {
             String[] strs = (String[]) arg[0];

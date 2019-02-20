@@ -31,10 +31,10 @@ public class TheGreatestTest {
         });
 
         // test cases
-        tester.addArgs(new Object[] { 100, 99 });
-        tester.addArgs(new Object[] { 50, 50 });
-        tester.addArgs(new Object[] { 0, 75 });
-        tester.addArgs(new Object[] { -1, -70 });
+        tester.addArgs(100, 99);
+        tester.addArgs(50, 50);
+        tester.addArgs(0, 75);
+        tester.addArgs(-1, -70);
 
         tester.runTests();
     }

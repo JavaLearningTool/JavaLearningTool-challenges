@@ -18,10 +18,10 @@ public class TwoDArrayConverterTest {
         tester.setEqualityTester(Arrays::deepEquals);
 
         // Test Cases
-        tester.addArgs((Object) new int[] { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 });
-        tester.addArgs((Object) new int[] { 11, -2, 3 });
-        tester.addArgs((Object) new int[] {});
-        tester.addArgs((Object) new int[] { 0, 11, 77, -14, 8, 8 });
+        tester.addArgs(() -> new int[] { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 });
+        tester.addArgs(() -> new int[] { 11, -2, 3 });
+        tester.addArgs(() -> new int[] {});
+        tester.addArgs(() -> new int[] { 0, 11, 77, -14, 8, 8 });
 
         tester.setMethodInvoker((obj, arg) -> {
             int[] in1 = (int[]) arg[0];

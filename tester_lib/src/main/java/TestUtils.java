@@ -7,11 +7,81 @@ import java.lang.reflect.Type;
 import java.util.List;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.lang.reflect.Array;
 import java.util.stream.IntStream;
 
 public class TestUtils {
 
     private TestUtils() {
+    }
+
+    /**
+     * Smarter way of testing for equality.
+     * Handles null and arrays
+     * 
+     * @param o1 first object to test equality on
+     * @param o2 second object to test equality on
+     * @return true if the objects are equal
+     */
+    public static boolean smartEquals(Object o1, Object o2) {
+        
+        if (o1 == o2) {
+            return true;
+        }
+
+        if (o1 == null) {
+            return false;
+        }
+        
+        if (o1.getClass().isArray()) {
+            if (o2.getClass().isArray()) {
+                return Arrays.deepEquals(convertToObjectArray(o1), convertToObjectArray(o2));
+            } else {
+                return false;
+            }
+        }
+
+        return o1.equals(o2);
+    }
+
+    /**
+     * Smarter way of doing toString
+     * Handles null and arrays
+     * 
+     * @param o object to convert to a String
+     * @return String version of the object
+     */
+    public static String smartToString(Object o) {
+        if (o == null) {
+            return "null";
+        }
+        
+        if (o.getClass().isArray()) {
+            return Arrays.deepToString(convertToObjectArray(o));
+        }
+
+        return o.toString();
+    }
+
+    /**
+     * Converts an Object that holds an instance of an array to an Object[]
+     * 
+     * @param array the object to convert
+     * @return The Object[] version of the passed in array
+     */
+    public static Object[] convertToObjectArray(Object array) {
+        Class ofArray = array.getClass().getComponentType();
+        if (ofArray.isPrimitive()) {
+            List ar = new ArrayList();
+            int length = Array.getLength(array);
+            for (int i = 0; i < length; i++) {
+                ar.add(Array.get(array, i));
+            }
+            return ar.toArray();
+        }
+        else {
+            return (Object[]) array;
+        }
     }
 
     public static Class<?> classExists(String className) {

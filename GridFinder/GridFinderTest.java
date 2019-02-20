@@ -54,19 +54,22 @@ public class GridFinderTest {
         // test cases
 
         // Count the number of 1s in evenArray
-        tester.addArgs(new Object[] { evenArray, 1 });
+        tester.addArgs(() -> evenArray, () -> 1);
 
         // Count the number of 3s in evenArray
-        tester.addArgs(new Object[] { evenArray, 3 });
+        tester.addArgs(() -> evenArray, () -> 3);
 
         // Count the number of 12s in evenArray
-        tester.addArgs(new Object[] { evenArray, 12 });
+        tester.addArgs(() -> evenArray, () -> 1);
 
         // Count the number of 5s in jaggedArray
-        tester.addArgs(new Object[] { jaggedArray, 5 });
+        tester.addArgs(() -> jaggedArray, () -> 5);
 
         // Count the number of 4s in jaggedArray
-        tester.addArgs(new Object[] { jaggedArray, 4 });
+        tester.addArgs(() -> jaggedArray, () -> 4);
+
+        // Count the number of -1s in jaggedArray
+        tester.addArgs(() -> jaggedArray, () -> -1);
 
         tester.runTests();
     }

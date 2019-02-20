@@ -29,17 +29,21 @@ public class ParseTester extends Tester {
 
     /**
      * @param fileName the name of the java file to examine
+     * @param args Command line arguments
      */
-    public ParseTester(String fileName) {
+    public ParseTester(String fileName, String[] args) {
+        String loc = fileName;
         try {
+            // The location of the file will be in command line args if not in the same folder
+            loc = (args.length > 0 ? args[0] : "") + fileName;
             // Load in java file to test
-            testedFile = JavaParser.parse(new File(fileName));
+            testedFile = JavaParser.parse(new File(loc));
         } catch(FileNotFoundException fnfe) {
             failedToForm = true;
-            setSingleMessageResult("File misnamed!", "Looking for " + fileName + " but did not find it.", false);
+            setSingleMessageResult("File misnamed!", "Looking for " + loc + " but did not find it.", false);
         } catch (ParseProblemException ppe) {
             failedToForm = true;
-            setSingleMessageResult("Problem parsing file!", "Failed to parse " + fileName + ". Contact administrator!", false);            
+            setSingleMessageResult("Problem parsing file!", "Failed to parse " + loc + ". Contact administrator!", false);            
         }
     }
     

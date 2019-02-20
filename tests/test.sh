@@ -24,7 +24,7 @@ do
         javac=$(javac -cp .:./test:../tester_lib/build/libs/tester_lib-all.jar:../shared *.java test/*.java 2>&1)
         json=$(java -cp .:./test:../tester_lib/build/libs/tester_lib-all.jar:../shared $testName"Test" 2>&1 test/)
 
-        if [[ $json == *"\"passed\": \"true\""* ]]; then
+        if [[ $json == *"\"passed\": \"true\""* ]] && [[ $json != *"\"passed\": \"false\""* ]]; then
             ((passed++))
         else
             ((failed++))

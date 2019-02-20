@@ -4,7 +4,7 @@ public class FixMePassByValueTest {
 
         // Make tester for this Challenge
         FunctionReturnTester<Void> tester = new FunctionReturnTester<Void>(FixMePassByValueTest::approved, "Test",
-                "changeEmployeeName", Employee.class, Void.class);
+                "changeEmployeeName", void.class, Employee.class, String.class);
         tester.noArgsConstructor();
 
         if (!tester.didForm()) {
@@ -13,34 +13,35 @@ public class FixMePassByValueTest {
         }
 
         // test cases
-        tester.addArgs(() -> new Person("Chad"));
-        tester.addArgs(() -> new Person("Stacy"));
-        tester.addArgs(() -> new Person("Jim"));
+        tester.addArgs(() -> new Employee("Chad"), () -> "Chaderick");
+        tester.addArgs(() -> new Employee("Stacy"), () -> "Tod");
+        tester.addArgs(() -> new Employee("Jim"), () -> "Jimbo");
 
         tester.setMethodInvoker((obj, arg) -> {
-            Person person = (Person) arg[0];
-            return tester.getMethod().invoke(obj, (Object) person);
+            Employee emp = (Employee) arg[0];
+            String newName = (String) arg[1];
+            return tester.getMethod().invoke(obj, (Object) emp, (Object) newName);
         });
 
-        tester.setInputToStringConverter(e -> Arrays.toString((String[]) e[0]));
+        tester.setInputToStringConverter((arg) -> {
+            Employee emp = (Employee) arg[0];
+            String newName = (String) arg[1];
 
-        tester.setOutputToStringConverter(Object::toString);
+            return String.format("employee = %s, newName = \"%s\"", emp, newName);
+        });
+
+        // Method is void
+        tester.setOutputToStringConverter(arg -> "No return");
 
         // Run test cases
         tester.runTests();
     }
 
-    public static String approved(Object[] params) {
-        Object in = params[0];
-        String[] input = (String[]) in;
+    public static Void approved(Object[] params) {
+        Employee emp = (Employee) params[0];
+        String newName = (String) params[1];
+        emp.setName(newName);
 
-        String ret = "";
-
-        for (int i = 0; i < input.length; i++) {
-            ret += input[i] + ": ";
-            ret += (input.length - i) + "\n";
-        }
-
-        return ret;
+        return null;
     }
 }

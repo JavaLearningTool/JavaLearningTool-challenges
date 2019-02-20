@@ -790,8 +790,8 @@ public class Test {
 1.  Open GridFinder folder and run the below commands and see if the output is as expected (It should be json detailing the results of the test case)
 
 ```
-javac -cp .:../tester_lib/build/libs/tester_.jar:../shared *.java
-java -cp .:../tester_lib/build/libs/teslib-all.jar:../shared GridFinderTest
+javac -cp .:../tester_lib/build/libs/tester_lib-all.jar:../shared *.java
+java -cp .:../tester_lib/build/libs/tester_lib-all.jar:../shared GridFinderTest
 ```
 
 Note that the output will look a little strange. It should be a json array.

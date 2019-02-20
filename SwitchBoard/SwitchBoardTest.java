@@ -2,7 +2,7 @@ public class SwitchBoardTest {
     public static void main(String[] args) {
         
         // Check for switch statement and number of cases
-        ParseTester parseTester = new ParseTester("Test.java");
+        ParseTester parseTester = new ParseTester("Test.java", args);
 
         if (!parseTester.didForm()) {
             // If parseTester does not form, print out whatever caused it to fail

@@ -544,7 +544,7 @@ public class ClassTester extends RunnableTester {
      * action = String.format(action, args)
      * 
      * @param testName name of the static method (used for looking up in methodMap)
-     * @param action   the string version of this chunk.
+     * @param action   the String version of this chunk.
      * @param args     the arguments to pass the static method
      */
     protected void addStaticFormatChunk(String testName, String action, Object... args) {

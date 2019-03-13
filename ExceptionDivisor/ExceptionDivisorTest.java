@@ -9,7 +9,7 @@ public class ExceptionDivisorTest {
                 "divide", double.class, double.class, double.class);
 
         tester.noArgsConstructor();
-        // Shouldn't throw anything
+        // Shouldn't throws anything
         tester.shouldThrow();
 
         if (!tester.didForm()) {

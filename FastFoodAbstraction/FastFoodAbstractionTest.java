@@ -60,10 +60,10 @@ public class FastFoodAbstractionTest {
             return eatAtTester.getMethod().invoke(obj, arg1, arg2, arg3);
         });
 
-        eatAtTester.addArgs(new Object[] { 4.0, true, 23.5, 2 });
-        eatAtTester.addArgs(new Object[] { 6.0, false, 45.5, 3 });
-        eatAtTester.addArgs(new Object[] { 4.8, true, 100.5, 1 });
-        eatAtTester.addArgs(new Object[] { 2.0, false, 132799.5, 7 });
+        eatAtTester.addArgs(() -> 4.0, () -> true, () -> 23.5, () -> 2 );
+        eatAtTester.addArgs(() -> 6.0, () -> false, () -> 45.5, () -> 3 );
+        eatAtTester.addArgs(() -> 4.8, () -> true, () -> 100.5, () -> (Integer) 1 ); // 1 is for some reason autoboxed to a boolean
+        eatAtTester.addArgs(() -> 2.0, () -> false, () -> 132799.5, () -> 7 );
 
         tester.addTesters(eatAtTester);
 

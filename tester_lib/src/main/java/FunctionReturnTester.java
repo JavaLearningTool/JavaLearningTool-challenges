@@ -145,6 +145,7 @@ public class FunctionReturnTester<O> extends MethodTester<O> {
                 actualIn[j] = argsSupplier[j].get();
             }
 
+            final String input = inToString.apply(expectedIn);
             try {
                 out = expectedFunction.apply(expectedIn);
             } catch (Throwable t) {
@@ -154,7 +155,6 @@ public class FunctionReturnTester<O> extends MethodTester<O> {
             final O expectedOut = out;
 
             // Must be final to be accessed from inner class
-            final String input = inToString.apply(expectedIn);
             AtomicBoolean testFinished = new AtomicBoolean(false);
 
             Runnable testRunner = new Runnable() {
@@ -252,7 +252,7 @@ public class FunctionReturnTester<O> extends MethodTester<O> {
                                     passed = false;
                                     //String expected, String actual, String label, String message, boolean passed, long time, String consoleOut
                                     result = new ComparativeMessageTestResult(TestUtils.smartToString(expectedSideEffect), TestUtils.smartToString(actualSideEffect),
-                                        "Parameter " + j + " modified in unexpected way.", null, false, System.currentTimeMillis() - startTime,
+                                        "Parameter " + j + " modified in unexpected way.", "Input: " + input, false, System.currentTimeMillis() - startTime,
                                         consoleOut);
                                     break;
                                 }

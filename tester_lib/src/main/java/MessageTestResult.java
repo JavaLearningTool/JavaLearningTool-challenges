@@ -48,7 +48,9 @@ public class MessageTestResult extends ConsoleOutTestResult {
             builder.append(",");
         }
 
-        builder.append(getPartString("Test", message, true));
+        if (message != null) {
+            builder.append(getPartString("Test", message, true));
+        }
     }
 
 }
